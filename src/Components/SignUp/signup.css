@@ -1,0 +1,50 @@
+.custom-card-width {
+    max-width: 800px; /* Adjust the width as needed */
+    width: 100%;
+    margin: auto;
+}
+.verifyBtn{
+    margin-top: 8px;
+}
+.backToLoginBtn{
+    cursor: pointer;
+}
+#passwordVerify{
+    font-size: 14px;
+}
+select.optionDefault {
+    color: rgb(176, 175, 175);
+}
+.optionValue{
+    color: black;
+}
+.border-red {
+    border-color: red !important;
+    box-shadow: 0 0 5px rgb(235, 78, 78) !important;
+}
+.phoneCode {
+    border: 1px solid #ced4da;
+    padding: 5px;
+    font-size: 14px;
+    border-radius: 6px;
+    width: auto;
+  }
+.phoneCode:focus {
+    color: #212529;
+    background-color: #fff;
+    border-color: #86b7fe;
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgb(13 110 253 / 25%);
+  }
+.phoneCode input {
+    display: inline-block;
+    width: auto;
+    border: none;
+  }
+.phoneCode input:focus {
+    box-shadow: none;
+  }
+  .bold-option option:checked {
+    font-weight: bold;
+    color: black;
+}

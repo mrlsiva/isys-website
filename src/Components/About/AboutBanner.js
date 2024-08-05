@@ -9,7 +9,7 @@ const AboutBanner = () => {
                     <div className="block-contents">
                         <div className="section-title">
                             <span>Insight of The Company</span>
-                            <h2 className="text-white">Our Company Grownup Last 30 Years</h2>
+                            <h2 className="text-white">Our Company Grownup Last 10 Years</h2>
                         </div>
                     </div>
                 </div>

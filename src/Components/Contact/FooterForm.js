@@ -1,4 +1,4 @@
-
+import logo from '../../assets/img/home3/logo.png'
 const FooterForm = () => {
     return (
         <section className="contact-sec-wrapper fix section-bg section-padding">
@@ -6,8 +6,8 @@ const FooterForm = () => {
                 <div className="row align-items-end d-flex">
                     <div className="col-lg-6 col-xl-5">
                         <div className="section-title-3">
-                            <h2>Let's work together</h2>
-                            <p>In social science, agency is defined as the capacity of individuals to act independently to make their own free choices. </p>
+                            <img src={logo} alt=""/>
+                            <p>Isys Technologies is a software development and consulting company focusing on web, mobile, desktop and embedded software solutions</p>
                         </div>
                     </div>
                     <div className="col-lg-6 col-xl-6 mt-5 mt-lg-0 offset-xl-1">

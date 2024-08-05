@@ -1,6 +1,6 @@
 import React from 'react'
-import icon1 from '../assets/img/icons/t1.png';
-import icon2 from '../assets/img/icons/t2.png';
+import icon1 from '../assets/img/icons/idea.png';
+import icon2 from '../assets/img/icons/team.png';
 
 
 const Timeline = () => {
@@ -11,15 +11,10 @@ const Timeline = () => {
                 <div className="col-lg-4  col-md-6 offset-lg-1 pe-lg-0">
                     <div className="timeline-content text-lg-end">
                         <div className="single-timeline-box">
-                            <span>1990 - 1995</span>
-                            <h6>Startup Construction</h6>
-                            <p>Busico also launch exciting events throughout the year. which is why our projects never quite look or feel the same way depends on the design.</p>
+                            <h6>Innovation idea</h6>
+                            <p>The main goal of this software is to help enterprise level businesses generate and evaluate ideas so that innovation can be cultivated and implemented.</p>
                         </div>
-                        <div className="single-timeline-box">
-                            <span>1990 - 1995</span>
-                            <h6>Construction Setup</h6>
-                            <p>We have intentionally never developed a stylistic formula for our work, which is why our projects never quite look or feel the same.</p>
-                        </div>
+                    
                     </div>
                 </div>
                 <div className="col-lg-2 d-none mt-40 d-lg-block">
@@ -35,14 +30,14 @@ const Timeline = () => {
                 <div className="col-lg-4 col-md-6 ps-lg-0">
                     <div className="timeline-content">
                         <div className="single-timeline-box">
-                            <span>1988 - 2006</span>
-                            <h6>Achieved Milestone</h6>
-                            <p>We have intentionally never developed a stylistic formula for our work, which is why our projects never quite look or feel the same.</p>
+                          
+                            <h6>Streamline</h6>
+                            <p>If you are a big company, we can help you streamline the processes and growth in the long term.</p>
                         </div>
                         <div className="single-timeline-box">
                             <span>2010 - 2020</span>
-                            <h6>Mashable Design</h6>
-                            <p>Busico also launch exciting events throughout the year. which is why our projects never quite look or feel the same way depends on the design.</p>
+                            <h6>Creative team</h6>
+                            <p>Isys Technologies is your team workspace where knowledge and collaboration meet to achieve great things.</p>
                         </div>
                     </div>
                 </div>

@@ -54,11 +54,10 @@ const FooterTwo = () => {
                             </div>
                             <ul>
                                 <li><Link to="/about">About Company</Link></li>
-                                <li><Link to="/services">Communication Services</Link></li>
-                                <li><Link to="/services">Internet of Things</Link></li>
-                                <li><Link to="/services">Product Development</Link></li>
-                                <li><Link to="/services">Industrial Automation</Link></li>
-                                <li><Link to="/contact">Payment Getway</Link></li>
+                                <li><Link to="/services">Services</Link></li>
+                                <li><Link to="/services">Career</Link></li>
+                                <li><Link to="/services">Contact</Link></li>
+                               
                             </ul>
                         </div>
                     </div> 
@@ -77,7 +76,7 @@ const FooterTwo = () => {
             </div>
         </div>
 
-        <FooterCta/>
+        {/* <FooterCta/> */}
         <FooterOneCopyrights/>
     </footer> 
   )

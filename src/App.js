@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import { Routes, Route} from 'react-router-dom';  
 import Preloader from './Components/Preloader';
+import 'boxicons/css/boxicons.min.css';
 import ScrollTopBtn from './Components/ScrollTopBtn';
 import AboutPage from './pages/AboutPage';
 import ServicePage from './pages/ServicePage';
@@ -16,7 +17,9 @@ import HomeThree from './pages/HomeThree';
 import HomeFour from './pages/HomeFour';
 import ProjectPage from './pages/ProjectPage';
 import ContactPage from './pages/ContactPage';
-
+import CareerPage from './pages/CareerPage';
+import SignUp from './Components/SignUp/SignUp';
+import Login from './Components/Login/Login';
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -34,14 +37,17 @@ function App() {
     <>
       <ScrollTopBtn/>
       <Routes>
-        <Route path="/" element={<HomeOne />} />
-        <Route path="/homeTwo" element={<HomeTwo />} />
+        <Route path="/" element={<HomeThree />} />
+        {/* <Route path="/homeTwo" element={<HomeTwo />} />
         <Route path="/homeThree" element={<HomeThree />} />
-        <Route path="/homeFour" element={<HomeFour />} />
+        <Route path="/homeFour" element={<HomeFour />} /> */}
+        <Route path="/signUp" element={<SignUp />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/services" element={<ServicePage />} />
         <Route path="/team" element={<TeamPage />} />
         <Route path="/faq" element={<FaqPage />} />
+        <Route path="/career" element={<CareerPage/>}/>
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/pricing" element={<PricingPage />} />
         <Route path="/newsDetails" element={<NewsDetails />} />
