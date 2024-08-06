@@ -3,6 +3,9 @@
     width: 100%;
     margin: auto;
 }
+.container{
+  font-size: 12px !important;
+}
 .verifyBtn{
     margin-top: 8px;
 }

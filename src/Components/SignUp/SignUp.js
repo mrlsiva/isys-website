@@ -282,13 +282,11 @@ function SignUp() {
   return (
     <div className="wrapper">
       <div className="section-authentication-signin d-flex align-items-center justify-content-center my-5 my-lg-0">
-        <div className="container">
+        <div className="container-fluid">
               <div className="card mb-0">
                 <div className="card-body">
                   <div className="p-1">
-                    <div className="mb-3 text-center">
-                      <img src={Logo} width="100" alt="Logo" />
-                    </div>
+                    
                     <div className="text-center mb-4">
                       <h5 className="">Candidate Registration</h5>
                     </div>
@@ -372,17 +370,13 @@ function SignUp() {
                                 )}
                               </div>
                             </div>
-                          </div>
-                        </div>
-                        <div className="col-12 d-flex gap-2">
-                          <div className="container mt-2">
-                            <div className="row">
+                          
+                            <div className="row mt-2">
                               <div className="col-12 col-lg-3 ms-0 pe-0">
                                 <label htmlFor="gender" className="form-label">Gender</label>
                                 <div id="gender" onBlur={handleGenderBlur}>
                                   <div className="form-check form-check-inline">
                                     <input
-                              
                                       className={`form-check-input ${touched.gender && errors.gender ? 'error-input' : ''}`}
                                       type="radio"
                                       name="gender"
@@ -454,84 +448,133 @@ function SignUp() {
                                 </select>
                                </div>
                             </div>
-                          </div>
-                        </div>
-
-                        --
-                        <div className="col-12 d-flex gap-2">
-                          <div className="container mt-2">
+                          
+                            <div className="row mt-2">
+                              <div className="col-12 col-lg-12 ms-0 pe-0 text-end">
+                                <div className="form-check d-flex justify-content-end align-items-center">
+                                  <input className="form-check-input me-2" type="checkbox" value="" id="flexCheckDefault"/>
+                                  <label className="form-check-label" for="flexCheckDefault">
+                                    Are You Fresher
+                                  </label>
+                                </div>
+                              </div>
+                            </div>
+                          
                             <div className="row">
-                            <div className="col-12 col-lg-3 ms-0 pe-0">
-                              <label htmlFor="gender" className="form-label">Gender</label>
-                              <div id="gender" onBlur={handleGenderBlur}>
-                                <div className="form-check form-check-inline">
-                                  <input
-                            
-                                    className={`form-check-input ${touched.gender && errors.gender ? 'error-input' : ''}`}
-                                    type="radio"
-                                    name="gender"
-                                    id="male"
-                                    value="male"
-                                    onChange={handleEvent}
-                                    required
-                                  />
-                                  <label className="form-check-label" htmlFor="male">Male</label>
-                                </div>
-                                <div className="form-check form-check-inline">
-                                  <input
-                                    className={`form-check-input ${touched.gender && errors.gender ? 'error-input' : ''}`}
-                                    type="radio"
-                                    name="gender"
-                                    id="female"
-                                    value="female"
-                                    onChange={handleEvent}
-                                    required
-                                  />
-                                  <label className="form-check-label" htmlFor="female">Female</label>
-                                </div>
+                              <div className="col-12 col-lg-3 ms-0 pe-0">
+                                 <label className="form-check-label" for="flexCheckDefault">
+                                    Profession
+                                  </label>
+                                <select class="form-select" aria-label="Default select example">
+                                  <option selected>Profession</option>
+                                  <option value="1">One</option>
+                                  <option value="2">Two</option>
+                                  <option value="3">Three</option>
+                                </select>
                               </div>
-                              {touched.gender && errors.gender && (
-                                <span className="error-message text-danger" id="genderValidationErrorMsg">
-                                  {errors.gender}
-                                </span>
-                              )}
-                            </div>
-                            <div className="col-5 ps-0">
-                              <label htmlFor="Experience" className="form-label">Experience</label>
-                              <div id="experience">
-                                <div className="form-check form-check-inline">
-                                  <input
-                                    className="form-check-input"
-                                    type="radio"
-                                    name="experience"
-                                    value="true"
-                                    checked={formValues.experience === 'true'}
-                                    onChange={handleEvent}
-                                  />
-                                  <label className="form-check-label" htmlFor="experience">Experienced</label>
-                                </div>
-                                <div className="form-check form-check-inline">
-                                  <input
-                                    className="form-check-input"
-                                    type="radio"
-                                    name="experience"
-                                    value="false"
-                                    checked={formValues.experience === 'false'}
-                                    onChange={handleEvent}
-                                  />
-                                  <label className="form-check-label" htmlFor="fresher">Fresher</label>
-                                </div>
+                              <div className="col-12 col-lg-3 ms-0 pe-0">
+                                 <label className="form-check-label" for="flexCheckDefault">
+                                    Sector
+                                  </label>
+                                <select class="form-select" aria-label="Default select example">
+                                  <option selected>Sector</option>
+                                  <option value="1">One</option>
+                                  <option value="2">Two</option>
+                                  <option value="3">Three</option>
+                                </select>
+                              </div>
+                              <div className="col-12 col-lg-3 ms-0 pe-0">
+                                 <label className="form-check-label" for="flexCheckDefault">
+                                    Upload Resume
+                                  </label>
+                                  <div className="mb-3">
+                                    <input className="form-control" type="file" id="formFile"/>
+                                  </div>
                               </div>
                             </div>
-                              <div className="col-3 pe-0">
-                                <label htmlFor="experience" className="form-label">Total Experience</label>
-                                <input type="text" className="form-control" onChange={handleEvent} name="totalexp" placeholder="2+" />
+                         
+                            <div className="row">
+                              <div className="accordion" id="accordionExample">
+                                <div className="accordion-item">
+                                  <h2 className="accordion-header" id="headingOne">
+                                    <button className="accordion-button bg-light" type="button" data-bs-toggle="collapse" style={{height: "30px", padding: "5px 10px"}} data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                      Experience
+                                    </button>
+                                  </h2>
+                                  <div id="collapseOne" className="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                    <div className="accordion-body">
+                                    <div className="row">
+                                        <div className="col-12 col-lg-1 ms-0 pe-0">
+                                            
+                                            <label htmlFor="Experience" className="form-label">Experience</label>
+                                                <input 
+                                                type="text" 
+                                                required
+                                                className="form-control" 
+                                                name="experience" 
+                                                placeholder="Exp" 
+                                                />
+                                          
+                                          </div>
+                                      </div>
+                                      <div className="row">
+                                        <div className="col-12 col-lg-12 ms-0 pe-0 text-end">
+                                            <div className="form-check d-flex justify-content-end align-items-center">
+                                              <input className="form-check-input me-2" type="checkbox" value="" id="flexCheckDefault"/>
+                                              <label className="form-check-label" for="flexCheckDefault">
+                                                Are You Currently Working
+                                              </label>
+                                            </div>
+                                          </div>
+                                      </div>
+                                      <div className="row">
+                                        <div className="col-12 col-lg-2 ms-0 pe-0">
+                                          <label className="form-check-label" for="flexCheckDefault">
+                                              Current Company
+                                            </label>
+                                          <select class="form-select" aria-label="Default select example">
+                                            <option selected>Profession</option>
+                                            <option value="1">One</option>
+                                            <option value="2">Two</option>
+                                            <option value="3">Three</option>
+                                          </select>
+                                        </div>
+                                        <div className="col-12 col-lg-2 ms-0 pe-0">
+                                          <label className="form-check-label" for="flexCheckDefault">
+                                              Current Role
+                                            </label>
+                                          <select class="form-select" aria-label="Default select example">
+                                            <option selected>Current Role</option>
+                                            <option value="1">One</option>
+                                            <option value="2">Two</option>
+                                            <option value="3">Three</option>
+                                          </select>
+                                        </div>
+                                        <div className="col-12 col-lg-2 ms-0 pe-0">
+                                          <label className="form-check-label" for="flexCheckDefault">
+                                              Current Designation
+                                            </label>
+                                          <select class="form-select" aria-label="Default select example">
+                                            <option selected>Current Designation</option>
+                                            <option value="1">One</option>
+                                            <option value="2">Two</option>
+                                            <option value="3">Three</option>
+                                          </select>
+                                        </div>
+                                        
+                                        <div className="col-12 col-lg-2 ms-0 pe-0">
+                                           <label className="form-check-label" for="flexCheckDefault">
+                                              JoinDate
+                                            </label>
+                                          <input type="date" className="form-control" id="datePicker" aria-label="Date of Birth" required />
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        </div>
-                        <div className="col-12 d-flex gap-2">
-                          <div className="container mt-2">
+                          
                             <div className="row">
                              <div className="col-2 ps-0">
                                 <label htmlFor="inputFirstName" className="form-label">Degree</label>
