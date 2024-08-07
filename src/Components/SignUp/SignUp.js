@@ -560,14 +560,24 @@ function SignUp() {
                                             <option value="2">Two</option>
                                             <option value="3">Three</option>
                                           </select>
-                                        </div>
-                                        
+                                        </div>                                       
                                         <div className="col-12 col-lg-2 ms-0 pe-0">
                                            <label className="form-check-label" for="flexCheckDefault">
                                               JoinDate
                                             </label>
                                           <input type="date" className="form-control" id="datePicker" aria-label="Date of Birth" required />
-                                        </div>
+                                        </div> 
+                                        <div className="col-12 col-lg-2 ms-0 pe-0">
+                                            <label htmlFor="Experience" className="form-label">Notice Period</label>
+                                                <input 
+                                                type="text" 
+                                                required
+                                                className="form-control" 
+                                                name="experience" 
+                                                placeholder="Exp" 
+                                                onChange={handleEvent}
+                                                />
+                                          </div>                                       
                                       </div>
                                     </div>
                                   </div>
