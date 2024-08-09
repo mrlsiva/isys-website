@@ -683,8 +683,8 @@ function SignUp() {
                                                 type="text" 
                                                 required
                                                 className="form-control" 
-                                                name="experience" 
-                                                placeholder="Exp" 
+                                                name="Persentage" 
+                                                placeholder="Percentage" 
                                                 />
                                             </div>
                                           </div>
