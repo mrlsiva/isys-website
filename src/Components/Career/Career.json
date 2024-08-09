@@ -1,0 +1,25 @@
+{
+    "title": "ISYS Career Portal",
+    "description": "Explore various career opportunities available in our organization.",
+    "positions": [
+      {
+        "title": "React Developer/Saga",
+        "description": "Software Engineer",
+        "experiance":"2-4 Yrs",
+        "income":"Not Disclosed",
+        "location":"Chennai",
+        "technology":"CSS,Javascript,NodeJs,HTML",
+        "notes":"You have built Micro Front Ends and have experience to maintain & support the adoption of Micro Front End Frameworks"
+      },
+      {
+        "title": "Java Developer",
+        "description": "Software Engineer",
+        "experiance":"2-4 Yrs",
+        "income":"Not Disclosed",
+        "location":"Chennai",
+        "technology":"Java,Express,Typescript,MongoDB",
+        "notes":"Preferred Skills: Technology->Java->Core Java"
+      }
+    ]
+}
+   

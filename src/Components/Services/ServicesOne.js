@@ -9,7 +9,7 @@ const ServicesOne = () => {
                 <div className="col-md-6 col-12 col-lg-4 mt-30">
                     <div className="block-contents">
                         <div className="section-title">
-                            <span>02. Featured Service</span>
+                            <span>Featured Service</span>
                             <h2>What We Offer You</h2>
                         </div>
                         <p>Our promise as a contractor is to build strong community value into every projects</p>

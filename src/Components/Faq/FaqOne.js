@@ -4,9 +4,9 @@ import faqOneData from "./faqOneData";
 
 const FaqOne = () => {
     return (
-        <section className="faq-funfact-section section-padding">
+        <section className="section-padding">
             <div className="container">
-                <div className="fun-fact-wrapper text-white mtm-30 text-center">
+                <div className="fun-fact-wrapper text-primary mtm-30 text-center">
                     <div className="row">
                         <div className="col-lg-3 col-md-6 col-12">
                             <div className="single-fun-fact mb-4 mb-lg-0">
@@ -34,7 +34,7 @@ const FaqOne = () => {
                         </div>
                     </div>
                 </div>
-                <div className="faq-wrapper section-padding pb-0">
+                {/* <div className="faq-wrapper section-padding pb-0">
                     <div className="row equal">
                         <div className="col-lg-6 col-12 col-xl-7 pe-lg-0">
                             <div className="faq-content">
@@ -64,7 +64,7 @@ const FaqOne = () => {
                             <FaqOneVideo/>
                         </div>
                     </div>
-                </div>
+                </div> */}
             </div> 
         </section> 
     )

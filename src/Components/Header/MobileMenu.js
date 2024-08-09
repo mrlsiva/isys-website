@@ -9,24 +9,24 @@ const MobileMenu = ({mobileMenu, handleMobileMenu}) => {
         </button>
         <nav className="sidebar-nav">
             <ul className="metismenu" id="mobile-menu">
-                <li><a className="has-arrow" href="#">Homes</a>
+                {/* <li><a className="has-arrow" href="#">Homes</a>
                     <ul className="sub-menu">
                         <li><Link to="/">homepage 1</Link></li>
                         <li><Link to="/homeTwo">homepage 2</Link></li>
                         <li><Link to="/homeThree">homepage 3</Link></li>
                         <li><Link to="/homeFour">homepage 4</Link></li>
                     </ul>
-                </li>
+                </li> */}
                 <li><Link to="/about">about us</Link></li>
                 <li><Link to="/services">Services</Link></li>
-                <li>
+                {/* <li>
                     <a className="has-arrow" href="#">Pages</a>
                     <ul className="sub-menu">
                         <li><Link to="/faq">faq</Link></li>
                         <li><Link to="/pricing">Pricing</Link></li>
                         <li><Link to="/team">Team</Link></li>
                     </ul>
-                </li>
+                </li> */}
                 <li><Link to="/news">News</Link></li>
                 <li><Link to="/contact">Contact</Link></li>
             </ul>

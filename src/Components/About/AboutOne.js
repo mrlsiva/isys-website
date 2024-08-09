@@ -35,10 +35,11 @@ const AboutOne = ({pt}) => {
                     <div className="col-xl-6 col-lg-7 col-md-10 col-12">
                         <div className="block-contents">
                             <div className="section-title">
-                                <span>01. About Company</span>
-                                <h2>creative building design company</h2>
+                                <span>About Company</span>
+                               
                             </div>
-                            <p>We have intentionally never developed a stylistic formula for our work, which is why our projects never quite look or feel the same. Each of our spaces is the result of our ability to listen.</p>
+                            <p>Isys Technologies is a software development and consulting company focusing on web, mobile, desktop and embedded software solutions, we have been bringing digital transformation to mid-sized and large enterprises in Banking and Finance, Insurance, Telecommunications, Healthcare and Retail. Our key domains include enterprise software, e-commerce, BI and Big Data, e-learning and IoT.
+                                We pride ourselves in providing creative and flexible out of the box solutions. All the deliverables are high-end systems built using latest technologies and are available at very reasonable prices compared to other competitors in the market. Right from the pre-sale’s questions to deployment and maintenance, the company’s young and spirited professionals collaborate well with the client to offer an overall amazing experience.</p>
                         </div>
                         <div className="tab-content-block">
                             <ul className="nav nav-pills mb-3" id="pills-tab" role="tablist">
@@ -97,14 +98,14 @@ const AboutOne = ({pt}) => {
                                 </div>
                             </div>                          
                         </div>
-                        <Link to="/about" className="plus-text-btn mt-lg-5 mt-4">
+                        {/* <Link to="/about" className="plus-text-btn mt-lg-5 mt-4">
                             <div className="icon">
                                 <i className="fas fa-plus"></i>
                             </div>
                             <div className="link-text">
                                 <span>Explore</span> More about Us
                             </div>
-                        </Link>
+                        </Link> */}
                     </div>
                 </div>
             </div>

@@ -24,7 +24,7 @@ const HeaderThree = () => {
   return (
     <>
     <OffsetMenu offset={offset} handleOffset={handleOffset}  />
-    <header className="header-wrap header-1">
+    <header className="header-wrap header-1 sticky-top">
         <div className="container-fluid d-flex justify-content-between align-items-center">
             <div className="logo">
                 <Link to='/'>
@@ -34,27 +34,27 @@ const HeaderThree = () => {
             <div className="header-right-area d-flex justify-content-between">
                 <div className="main-menu d-none d-xl-block me-xl-5">
                     <ul>
-                        <li><a href="index.html">Home <i className="fal fa-plus"></i></a>
-                            <ul className="sub-menu">
+                        <li><a href="/">Home </a>
+                            {/* <ul className="sub-menu">
                                 <li><Link to="/">homepage 1</Link></li>
                                 <li><Link to="/homeTwo">homepage 2</Link></li>
                                 <li><Link to="/homeThree">homepage 3</Link></li>
                                 <li><Link to="/homeFour">homepage 4</Link></li>
-                            </ul>
+                            </ul> */}
                         </li>
                         <li><Link to="/about">about us</Link></li>
                         <li><Link to="/services">Services</Link></li>
-                        <li><a href="#">Pages <i className="fal fa-plus"></i></a>
+                        {/* <li><a href="#">Pages <i className="fal fa-plus"></i></a>
                             <ul className="sub-menu">
                                 <li><Link to="/Team">team</Link></li>
                                 <li><Link to="/faq">faq</Link></li>
                                 <li><Link to="/projects">projects</Link></li>
                                 <li><Link to="/pricing">Pricing</Link></li>
                             </ul>
-                        </li>
-                        <li><Link to="/news">News</Link></li>
+                        </li> */}
+                        <li><Link to="/career">Career</Link></li>
                         <li><Link to="/contact">Contact</Link></li>
-                        <li>
+                        {/* <li>
                             <a href="#" onClick={handleSearch} className="search-btn"><i className="fas fa-search"></i></a>
                             <div className={search ? 'search-box' : 'search-box show'}>
                                 <form action="#">
@@ -62,11 +62,12 @@ const HeaderThree = () => {
                                     <button type="submit"><i className="fal fa-search"></i></button>
                                 </form>
                             </div>
-                        </li>
+                        </li> */}
                     </ul>
                 </div>
                 <div className="header-right-elements d-flex align-items-center justify-content-between">
-                    <Link to="/contact" className="theme-btn style-3 d-none d-sm-block">Try Free Now</Link>
+                    <Link to="/signup" className="theme-btn style-3 d-none d-sm-block">SignUp</Link>
+                    <Link to="/login" className="theme-btn style-3 d-none d-sm-block">Login</Link>
                     <div className="d-inline-block ms-4 d-xl-none">
                         <div className="mobile-nav-wrap">                    
                             <div id="hamburger" onClick={handleMobileMenu}>

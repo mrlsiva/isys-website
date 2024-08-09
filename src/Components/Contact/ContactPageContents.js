@@ -75,12 +75,12 @@ const ContactPageContents = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="live-chat">
+                        {/* <div className="live-chat">
                             <h2>Live Chat</h2>
                             <p>You can contact us on chat and explain 
                             your problems</p>
                             <Link to="/about"><i className="flaticon-chatting" /> Live Chat to Executive</Link>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
                 </div>

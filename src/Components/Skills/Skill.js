@@ -48,7 +48,7 @@ const Skill = () => {
                     <div className="skill-wrapper">
                         <div className="single-progress-bar">
                             <div className="title justify-content-between d-flex align-items-center">
-                                <h5>Construction</h5>
+                                <h5>Development</h5>
                                 <span className="wow fadeInLeft" data-wow-duration="1.5s" data-wow-delay="1s">90%</span>
                             </div>
                             <div className="progress">
@@ -57,7 +57,7 @@ const Skill = () => {
                         </div>
                         <div className="single-progress-bar">
                             <div className="title justify-content-between d-flex align-items-center">
-                                <h5>Customer Support</h5>
+                                <h5>Client Support</h5>
                                 <span className="wow fadeInLeft" data-wow-duration="1.5s" data-wow-delay="1.3s">87%</span>
                             </div>
                             <div className="progress">
@@ -77,9 +77,9 @@ const Skill = () => {
                 </div>
             </div>
         </div>
-        <div className="koppa-img d-none d-xxl-block">
+        {/* <div className="koppa-img d-none d-xxl-block">
             <img src={koppa} alt="" className="wow fadeInLeft" data-wow-delay=".4s" data-wow-duration="1.5s"/>
-        </div>
+        </div> */}
     </section> 
   )
 }

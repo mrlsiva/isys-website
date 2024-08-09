@@ -8,22 +8,22 @@ const servicesThreeData = [
     {
         id: uuidv4(),
         img: img1,
-        title: 'Digital Marketing',
-        desc: 'Digital marketing focuses on direct response. We have the digital expertise of SEO optimization.',
+        title: 'Innovation idea',
+        desc: 'The main goal of this software is to help enterprise level businesses generate and evaluate ideas so that innovation can be cultivated and implemented.',
     },
 
     {
         id: uuidv4(),
         img: img2,
-        title: 'Web Development',
-        desc: 'Sometimes it’s the little things in web life that make us look twice. From carousels to documentation.',
+        title: 'Streamline',
+        desc: 'If you are a big company, we can help you streamline the processes and growth in the long term.',
     },
 
     {
         id: uuidv4(),
         img: img3,
-        title: 'Creative Design',
-        desc: 'Busico has advanced enough where it now supports some powerful concepts that can help with the flexibility.',
+        title: 'Creative team',
+        desc: 'Isys Technologies is your team workspace where knowledge and collaboration meet to achieve great things.',
     },
 
     
