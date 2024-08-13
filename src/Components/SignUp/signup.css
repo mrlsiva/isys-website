@@ -51,3 +51,17 @@ select.optionDefault {
     font-weight: bold;
     color: black;
 }
+.delete-button{
+  color: red;
+  margin-top: 36px;
+  padding: 4px 12px 4px 12px !important;
+  opacity: 25px;
+  background-color: rgb(207, 203, 203);
+}
+.delete-current-button{
+  color: red;
+  margin-top: 30px;
+  padding: 4px 12px 4px 12px !important;
+  opacity: 25px;
+  background-color: rgb(207, 203, 203);
+}
