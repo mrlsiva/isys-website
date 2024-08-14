@@ -58,6 +58,15 @@ function SignUp() {
     profession:'',
     sector:''
   });
+  const [current, setCurrent] = useState({
+    currentCompanyName: '',
+    currentRoleName: '',
+    currentDesignationName: '',
+    joinDate: '',
+    noticePeriod: '',
+  });
+  const [isFresher, setIsFresher] = useState(false); // Separate state for the checkbox
+
  
   const [data, setData] = useState([])
   const [countryOptions, setCountryOptions] = useState([])
@@ -70,16 +79,21 @@ function SignUp() {
   const [visible,setVisible]= useState(false)
   const [userCode,setUserCode] = useState("")
   const [isWorking, setIsWorking] = useState(false);
+  const [uploadedFiles,setUploadedFiles] = useState([])
+  const [fileLimit,setFileLimit]=useState(false)
+  const MAX_COUNT =5;
   const [qualifications, setQualifications] = useState([
-    { id: 1, qualification: '', educationName: '', passOutYear: '', percentage: '' }
+    { id: 1, qualification: '', institutionName: '', yearOfPassOut: '', percentage: '' }
   ]);
   const [currentCompany,setCurrentCompany] = useState([
-    {id:1, currentCompany:'',currentRole:'',currentDesignation:'',joinDate:'',noticePeriod:''}
+    {id:1, currentCompany:'',currentRole:'',currentDesignation:'',joiningDate:'',noticePeriod:''}
   ])
   const [lastCompany, setLastCompany] = useState([
-    { id: 1, lastCompanyName: '', lastRoleName: '', lastDesignationName: '', joinDate: '', relievingDate: '' },
+    { id: 1, lastCompany: '', lastRole: '', lastDesignation: '', lastJoiningDate: '', lastRelievingDate: '' },
   ]);
-
+  const handleCheckExperience = (e) => {
+    setIsFresher(e.target.checked);
+  };
   console.log("qualification",qualifications)
   const handleCheckboxChange = () => {
     setIsWorking(!isWorking);
@@ -161,8 +175,11 @@ function SignUp() {
   const handleEvent = (e) => {
     const { name, value, type, checked } = e.target;
     console.log("name:", name, "value:", value, "type:", type, "checked:", checked);
-  
-    if (name === 'emailId') {
+    if (type === 'checkbox') {
+      // Update form values based on checkbox
+      setFormValues({ ...formValues, [name]: checked ? 'fresher' : 'Experience' });
+    }
+    else if (name === 'emailId') {
       // Email validation
       const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailPattern.test(value)) {
@@ -170,8 +187,6 @@ function SignUp() {
       } else {
         setErrors({ ...errors, [name]: '' });
       }
-    }else if(type === 'checkbox'){
-      setFormValues({...formValues,[name]:checked?'fresher':'Experience'})
     } else if (name === 'phoneNumber') {
       // Phone number validation
       const phonePattern = /^[0-9]{10}$/;
@@ -202,6 +217,13 @@ function SignUp() {
     // Update form values
     setFormValues({ ...formValues, [name]: value });
   };
+  const handleCurrent = (event) => {
+    const { name, value } = event.target;
+    setCurrent((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
   const handleChange = (id, field, value) => {
     const updatedQualifications = qualifications.map(qualification => 
       qualification.id === id ? { ...qualification, [field]: value } : qualification
@@ -213,7 +235,7 @@ function SignUp() {
     const { name, value } = e.target;
     setTouched({ ...touched, [name]: true });
     if (!value) {
-      setErrors({ ...errors, [name]: 'Please fill required this field' });
+      setErrors({ ...errors, [name]: 'Please fill the required field' });
     } 
   };
   const handleGenderBlur = () => {
@@ -226,14 +248,34 @@ function SignUp() {
   const handleAddMoreDegree = () => {
     setQualifications([
       ...qualifications, 
-      { id: qualifications.length + 1, qualification: '', educationName: '', passOutYear: '', percentage: '' }
+      { id: qualifications.length + 1, qualification: '', institutionName: '', yearOfPassOut: '', percentage: ''  }
     ]);
   };
 
   const handleRemoveDegree = (id) => {
     setQualifications(qualifications.filter(qualification => qualification.id !== id));
   };
-
+  const handleUploadedFiles= files =>{
+    const uploaded=[...uploadedFiles]
+    let limitExceeded = false
+    files.forEach((file)=>{
+        if(uploaded.findIndex((f)=>f.name === file.name)=== -1){
+            uploaded.push(file)
+            if(uploaded.length === MAX_COUNT) setFileLimit(true);
+            if(uploaded.length> MAX_COUNT){
+                toast.error(`you only added max of ${MAX_COUNT} files` )
+                setFileLimit(false)
+                limitExceeded=true;
+                return true
+            }
+        }
+    })
+    if(!limitExceeded) setUploadedFiles(uploaded)
+   }
+  const handleFileChange = (e)=>{
+    const chosenFiles = Array.from(e.target.files);
+    handleUploadedFiles(chosenFiles);
+}
   useEffect(() => {
     const verifyCandidate = async () => {
       console.log("userCode", userCode);
@@ -270,7 +312,7 @@ function SignUp() {
   const handleAddMoreCurrentCompany = () => {
     setCurrentCompany([
       ...currentCompany,
-      { id: currentCompany.length + 1, currentCompanyName: '', currentRoleName: '', currentDesignationName: '', joinDate: '', noticePeriod: '' },
+      { id: currentCompany.length + 1, currentCompany:'',currentRole:'',currentDesignation:'',joiningDate:'',noticePeriod:'' },
     ]);
   };
 
@@ -280,7 +322,7 @@ function SignUp() {
   const handleAddMoreLastCompany = () => {
     setLastCompany([
       ...lastCompany,
-      { id: lastCompany.length + 1, lastCompanyName: '', lastRoleName: '', lastDesignationName: '', joinDate: '', relievingDate: '' },
+      { id: lastCompany.length + 1, lastCompany: '', lastRole: '', lastDesignation: '', lastJoiningDate: '', lastRelievingDate: '' },
     ]);
   };
 
@@ -293,45 +335,87 @@ function SignUp() {
     console.log("formValues",formValues)
     console.log("area",area)
     console.log("phonenumber",formValues)
+    const curCompany = currentCompany.map(item => ({
+      ...item,  
+      currentlyWorking: isWorking  
+    }));
+    const lasCompany=lastCompany.map(item =>({
+      ...item,
+      currentlyWorking: isWorking,
+    }))
+  
+    const removeIdField = (array) => array?.map(({ id, ...rest }) => rest);
     const finalData={
       firstName:formValues.firstName,
       lastName:formValues.lastName,
       emailId:formValues.emailId,
       mobileNumber:"7639651113",
-      // experienceFresher:formValues.experience?formValues.experience:false,
-      // totalExperience:formValues.totalexp?formValues.totalexp:"string",
-      // degree:formValues.degree,
-      // resume:'string',
-      // country:area.countryId,
-      // state:area.stateId,
-      // city: area.cityId,
+      passWord:'' ,
       gender: formValues.gender,
+      companyName:'',
+      profession:formValues.profession,
+      role:'',
+      designation:'',
+      experienceFresher:isFresher?isFresher:false,
+      totalExperience:formValues.totalexp?formValues.totalexp:"string",
+      industry:formValues.sector,
+      degree:'',
+      resume:'string',
+      resumeDownloadUrl: "string",
+      country:area.countryId,
+      state:area.stateId,
+      city: area.cityId,
       candidateType:"",
-      candidateTypeName: ""
+      candidateTypeName: "",
+      candidateExperiences:isWorking ? removeIdField(curCompany) : removeIdField(lasCompany),
+      candidateQualifications: removeIdField(qualifications)
     }
     console.log("final data",finalData)
-    // let Fullurl=constants.CANDIDATE+'candidate/save'
+   
+    let Fullurl=constants.CANDIDATE+'candidate/save'
+    var json=JSON.stringify(finalData)
+        const blob = new Blob([json], {
+        type:"application/json"
+      })
+     
+      // console.log("blob value...",blob)
+       var bodyFormData = new FormData();
+       bodyFormData.append("contract", blob);
+       for (let i = 0; i < uploadedFiles?.length; i++) {
+        bodyFormData.append("documentList", uploadedFiles[i]);
+      }
   
-    // let res = await fetch(Fullurl, {
-    //   method: 'post',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //     "Access-Control-Allow-Headers" : "Content-Type",
-    //     "Access-Control-Allow-Origin": "*",
-    //     "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
-    //   },
-    //   body: JSON.stringify(finalData),
-    // }).catch(function(error){
-    // });
-    // if (res.status === 200) {
-    //   let response = await res.json();
-    //   setUserCode(response.id)
-    //   console.log("Response received:", response.id);
-    //   setTimeout(function () {
-    //   }, 2000)
-    // } else {
-    //   toast.success("User is already in use,please Create different user")
-    // }
+      console.log("formData",bodyFormData)
+      try {
+        let res = await fetch(Fullurl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            // 'Content-Type': 'application/json',
+            // "Access-Control-Allow-Headers" : "Content-Type",
+            // "Access-Control-Allow-Origin": "*",
+            // "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
+          },
+          body: bodyFormData
+        });
+      
+        if (res.ok) { // Simplified the status check
+          let response = await res.json();
+          setUserCode(response.id);
+          console.log("Response received:", response.id);
+          setTimeout(function () {
+        
+          }, 2000);
+        } else if (res.status === 409) { 
+          toast.error("User is already in use, please create a different user");
+        } else {
+          toast.error("An error occurred. Please try again later.");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        toast.error("An unexpected error occurred. Please try again later.");
+      }
+      
     // dispatch(signUpUser({
     //   communicationaddress,
     //   formValues,
@@ -345,22 +429,21 @@ function SignUp() {
         <div className="container-fluid">
               <div className="card mb-0 bg-light">
                 <div className="card-body">
-                  <div className="p-1">
-                    
+                  <div className="p-1">  
                     <div className="text-center mb-4">
-                      <h5 className="">Candidate Registration</h5>
+                      <h5 className="headerStyle">Candidate Registration</h5>
                     </div>
                     <div className="form-body">
                       <form className="row g-3" onSubmit={submitSignUpUser}>
                         <div className="col-12 d-flex gap-2">
                           <div className="container-fluid">
-                            <div className="row">
+                            <div className="row ">
                               <div className="col-12 col-lg-3 ">
-                                <label htmlFor="inputFirstName" className="form-label">First Name</label>
+                                <label htmlFor="inputFirstName" className="form-label mb-0">First Name</label>
                                 <input 
                                 type="text" 
                                 required
-                                className={`form-control ${touched.firstName &&errors.firstName ? 'error-input' : ''}`} 
+                                className={`form-control form-control-sm ${touched.firstName &&errors.firstName ? 'error-input' : ''}`} 
                                 name="firstName" 
                                 onBlur={handleBlur} 
                                 onChange={handleEvent} 
@@ -373,11 +456,11 @@ function SignUp() {
                                 )}
                               </div>
                               <div className="col-12 col-lg-3 ">
-                                <label htmlFor="inputLastName" className="form-label">Last Name</label>
+                                <label htmlFor="inputLastName" className="form-label mb-0">Last Name</label>
                                 <input 
                                   type="text" 
                                   required
-                                  className={`form-control ${touched.lastName &&errors.lastName ? 'error-input' : ''}`} 
+                                  className={`form-control form-control-sm ${touched.lastName &&errors.lastName ? 'error-input' : ''}`} 
                                   name="lastName"  
                                   onChange={handleEvent} 
                                   onBlur={handleBlur}
@@ -390,11 +473,11 @@ function SignUp() {
                                 )}
                               </div>
                               <div className="col-12 col-lg-3">
-                                <label htmlFor="inputEmailAddress" className="form-label">Email</label>
+                                <label htmlFor="inputEmailAddress" className="form-label mb-0">Email</label>
                                 <input 
                                   type="email" 
                                   required
-                                  className={`form-control ${touched.emailId &&errors.emailId ? 'error-input' : ''}`} 
+                                  className={`form-control form-control-sm ${touched.emailId &&errors.emailId ? 'error-input' : ''}`} 
                                   name="emailId"  
                                   onChange={handleEvent} 
                                   onBlur={handleBlur}
@@ -407,22 +490,22 @@ function SignUp() {
                                 )}
                               </div>
                               <div className="col-12 col-lg-3">
-                                <label htmlFor="inputPhoneNumber" className="form-label">Phone</label>
+                                <label htmlFor="inputPhoneNumber" className="form-label mb-0">Phone</label>
                                 <div className="input-group">
                                   <div className="input-group-prepend">
                                     <span className="input-group-text country-code">+91</span>
                                   </div>
                                   <input
-                                    type="Number"
+                                    type="number"
                                     required
-                                    className={`form-control ${touched.phoneNumber &&errors.phoneNumber ? 'error-input' : ''}`} 
+                                    className={`form-control form-control-sm ${touched.phoneNumber && errors.phoneNumber ? 'error-input' : ''}`} 
                                     name="phoneNumber"
                                     minLength="10"
                                     onBlur={handleBlur}
                                     onKeyUp={handleEvent}
                                     placeholder="Phone No"
                                   />
-                                </div>
+                                  </div>
                                 {errors.phoneNumber && touched.phoneNumber && (
                                   <span className="text-danger" id="phoneNumberValidationError">
                                     {errors.phoneNumber}
@@ -431,11 +514,11 @@ function SignUp() {
                               </div>
                             </div>
                           
-                            <div className="row mt-2">
+                            <div className="row">
                               <div className="col-12 col-lg-3">
-                                <label htmlFor="degree" className="form-label">Gender</label>
+                                <label htmlFor="degree" className="form-label mb-0">Gender</label>
                                 <select
-                                  className={`form-control ${errors.gender ? 'is-invalid' : ''}`}
+                                  className={`form-control form-control-sm ${errors.gender ? 'is-invalid' : ''}`}
                                   required
                                   value={formValues.gender}
                                   name="gender"
@@ -455,8 +538,8 @@ function SignUp() {
 
                             
                               <div className="col-12 col-lg-3">
-                                  <label htmlFor="degree" className="form-label">Country</label>
-                                  <select className="form-control" value={communicationaddress.countryId}
+                                  <label htmlFor="degree" className="form-label mb-0">Country</label>
+                                  <select className="form-control form-control-sm" value={communicationaddress.countryId}
                                     name="countryId"
                                     onChange={handleInputsetcommunicationaddress} >
                                   <option value="">Select Country</option>
@@ -468,8 +551,8 @@ function SignUp() {
                                   </select>
                               </div>
                               <div className="col-12 col-lg-3">
-                              <label htmlFor="degree" className="form-label">State</label>
-                                <select className="form-control"   
+                              <label htmlFor="degree" className="form-label mb-0">State</label>
+                                <select className="form-control form-control-sm"   
                                   value={communicationaddress.stateId}
                                   name="stateId"
                                   onChange={handleInputsetcommunicationaddress}>
@@ -482,8 +565,8 @@ function SignUp() {
                                 </select>
                               </div>
                               <div className="col-12 col-lg-3">
-                                <label htmlFor="degree" className="form-label">City</label>
-                                <select className="form-control" 
+                                <label htmlFor="degree" className="form-label mb-0">City</label>
+                                <select className="form-control form-control-sm" 
                                   value={communicationaddress.cityId}
                                   name="cityId"
                                   onChange={handleInputsetcommunicationaddress}>
@@ -496,15 +579,13 @@ function SignUp() {
                                 </select>
                                </div>
                             </div>
-                          
-                            
-                            <div className="row mt-2">
+                            <div className="row">
                               <div className="col-12 col-lg-3">
-                                <label className="form-check-label">
+                                <label className="form-check-label mb-0">
                                   Profession
                                 </label>
                                 <select
-                                  className={`form-select ${errors.profession ? 'is-invalid' : ''}`}
+                                  className={`form-select form-select-sm ${errors.profession ? 'is-invalid' : ''}`}
                                   name="profession"
                                   onChange={handleEvent}
                                   onBlur={handleBlur}
@@ -524,7 +605,7 @@ function SignUp() {
                               </div>
 
                               <div className="col-12 col-lg-3 ">
-                                 <label className="form-check-label" for="flexCheckDefault">
+                                 <label className="form-check-label mb-0" for="flexCheckDefault">
                                     Sector
                                   </label>
                                 <select class="form-select" 
@@ -532,7 +613,7 @@ function SignUp() {
                                  onBlur={handleBlur}
                                  name="sector"
                                  required
-                                 className={`form-select ${errors.sector ? 'is-invalid' : ''}`}
+                                 className={`form-select form-select-sm ${errors.sector ? 'is-invalid' : ''}`}
                                  aria-label="Default select example">
                                   <option selected></option>
                                   <option value="1">One</option>
@@ -546,37 +627,44 @@ function SignUp() {
                                 )}
                               </div>
                               <div className="col-12 col-lg-3">
-                                 <label className="form-check-label" for="flexCheckDefault">
+                                 <label className="form-check-label mb-0" for="flexCheckDefault">
                                     Upload Resume
                                   </label>
                                   <div className="mb-3">
-                                    <input className="form-control" type="file" id="formFile"/>
+                                    <input className="form-control form-select-sm" 
+                                    type="file" 
+                                    id="formFile"
+                                    onChange={handleFileChange}
+                                    accept='application/pdf, image/png'
+                                    //id="fileUpload"
+                                    
+                                    name="attachmentImg"
+                                    />
                                   </div>
                               </div>
                             </div>
-                            <div className="row mt-2">
-                              <div className="col-12 col-lg-12 ms-0 pe-0 text-end">
-                                <div className="form-check d-flex justify-content-end align-items-center">
-                                  <input
-                                    className="form-check-input me-2"
-                                    type="checkbox"
-                                    onChange={handleEvent}
-                                    checked={formValues.position === 'fresher'}
-                                    name="position"
-                                    id="flexCheckDefault"
-                                  />
-                                  <label className="form-check-label" htmlFor="flexCheckDefault">
-                                    Are You Fresher
-                                  </label>
+                            <div className="row">
+                                <div className="col-12 col-lg-12 ms-0 pe-0 text-end">
+                                  <div className="form-check d-flex justify-content-end align-items-center">
+                                    <label className="form-check-label me-4" htmlFor="flexCheckDefault">
+                                      Are You Fresher
+                                    </label>
+                                    <input
+                                      className="form-check-input form-check-input-sm me-3"
+                                      type="checkbox"
+                                      onChange={handleCheckExperience}
+                                      checked={isFresher}
+                                      name="experience"
+                                      id="flexCheckDefault"
+                                    />                       
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                          
                             <div className="row mt-2 mb-4">
                               <div className="accordion" id="accordionExample">
                                 <div className="accordion-item">
                                   <h2 className="accordion-header" id="headingOne">
-                                    <button className="accordion-button bg-light" type="button" data-bs-toggle="collapse" style={{height: "45px", padding: "5px 10px"}} data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    <button className="accordion-button bg-light" type="button" data-bs-toggle="collapse" style={{height: "40px", padding: "5px 10px"}} data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                                       Experience
                                     </button>
                                   </h2>
@@ -586,11 +674,11 @@ function SignUp() {
                                         <div className="col-12 col-lg-2">
                                           <label htmlFor="Experience" className="form-label">Total Experience</label>
                                         </div>
-                                        <div className="col-12 col-lg-1">
+                                        <div className="col-12 col-lg-1 text-left">
                                           <input 
                                             type="text" 
                                             required
-                                            className="form-control" 
+                                            className="form-control form-control-sm" 
                                             onChange={handleEvent}
                                             name="totalExperience" 
                                             placeholder="Exp" 
@@ -598,7 +686,7 @@ function SignUp() {
                                         </div>
                                         <div className="col-12 col-lg-9 text-lg-end">
                                           <div className="form-check d-flex justify-content-end align-items-center">
-                                            <label className="form-check-label me-4" htmlFor="flexCheckDefault">
+                                            <label className="form-check-label me-5" htmlFor="flexCheckDefault">
                                               Are You Currently Working
                                             </label>  
                                             <input 
@@ -612,122 +700,80 @@ function SignUp() {
                                         </div>
                                       </div>
                                       {isWorking ? (
-                                        <>
-                                          {currentCompany.map((company, index) => (
-                                            <div className="row" key={company.id}>
-                                              <div className="col-12 col-lg-3 ms-0 pe-0">
-                                                <label className="form-check-label" htmlFor={`currentCompany-${index}`}>
-                                                  Current Company
-                                                </label>
-                                                <select
-                                                  className="form-select"
-                                                  name="currentCompanyName"
-                                                  value={company.currentCompanyName}
-                                                  onChange={(e) => {
-                                                    const newCurrentCompany = [...currentCompany];
-                                                    newCurrentCompany[index].currentCompanyName = e.target.value;
-                                                    setCurrentCompany(newCurrentCompany);
-                                                  }}
-                                                  aria-label="Default select example"
-                                                >
-                                                  <option value=""></option>
-                                                  <option value="Cognizant">Cognizant</option>
-                                                  <option value="Wipro">Wipro</option>
-                                                  <option value="Zoho">Zoho</option>
-                                                </select>
-                                              </div>
-                                              <div className="col-12 col-lg-2 ms-0 pe-0">
-                                                <label className="form-check-label" htmlFor={`currentRole-${index}`}>
-                                                  Current Role
-                                                </label>
-                                                <select
-                                                  className="form-select"
-                                                  name="currentRoleName"
-                                                  value={company.currentRoleName}
-                                                  onChange={(e) => {
-                                                    const newCurrentCompany = [...currentCompany];
-                                                    newCurrentCompany[index].currentRoleName = e.target.value;
-                                                    setCurrentCompany(newCurrentCompany);
-                                                  }}
-                                                  aria-label="Default select example"
-                                                >
-                                                  <option value=""></option>
-                                                  <option value="Admin">Admin</option>
-                                                  <option value="UI Developer">UI Developer</option>
-                                                  <option value="Java Developer">Java Developer</option>
-                                                </select>
-                                              </div>
-                                              <div className="col-12 col-lg-2 ms-0 pe-0">
-                                                <label className="form-check-label" htmlFor={`currentDesignation-${index}`}>
-                                                  Current Designation
-                                                </label>
-                                                <select
-                                                  className="form-select"
-                                                  name="currentDesignationName"
-                                                  value={company.currentDesignationName}
-                                                  onChange={(e) => {
-                                                    const newCurrentCompany = [...currentCompany];
-                                                    newCurrentCompany[index].currentDesignationName = e.target.value;
-                                                    setCurrentCompany(newCurrentCompany);
-                                                  }}
-                                                  aria-label="Default select example"
-                                                >
-                                                  <option value=""></option>
-                                                  <option value="Team Leader">Team Leader</option>
-                                                  <option value="Project Manager">Project Manager</option>
-                                                  <option value="Sales Manager">Sales Manager</option>
-                                                </select>
-                                              </div>
-                                              <div className="col-12 col-lg-2 ms-0 pe-0">
-                                                <label className="form-check-label" htmlFor={`joinDate-${index}`}>
-                                                  Join Date
-                                                </label>
-                                                <input
-                                                  type="date"
-                                                  className="form-control"
-                                                  name="joinDate"
-                                                  value={company.joinDate}
-                                                  onChange={(e) => {
-                                                    const newCurrentCompany = [...currentCompany];
-                                                    newCurrentCompany[index].joinDate = e.target.value;
-                                                    setCurrentCompany(newCurrentCompany);
-                                                  }}
-                                                  aria-label="Join Date"
-                                                />
-                                              </div>
-                                              <div className="col-12 col-lg-2 ms-0 pe-0">
-                                                <label className="form-check-label" htmlFor={`noticePeriod-${index}`}>
-                                                  Notice Period
-                                                </label>
-                                                <input
-                                                  type="text"
-                                                  className="form-control"
-                                                  name="noticePeriod"
-                                                  value={company.noticePeriod}
-                                                  onChange={(e) => {
-                                                    const newCurrentCompany = [...currentCompany];
-                                                    newCurrentCompany[index].noticePeriod = e.target.value;
-                                                    setCurrentCompany(newCurrentCompany);
-                                                  }}
-                                                  placeholder="Notice Period"
-                                                />
-                                              </div>
-                                              <div className="col-12 col-lg-1 text-end">
-                                                <button
-                                                  className="delete-current-button"
-                                                  onClick={() => handleRemoveCurrentCompany(company.id)}
-                                                >
-                                                  <FontAwesomeIcon icon={faTrash} className="text-danger" />
-                                                </button>
-                                              </div>
-                                            </div>
-                                          ))}
-                                          <div className="row">
-                                            <p className="text-primary" onClick={handleAddMoreCurrentCompany}>
-                                              + Add More
-                                            </p>
+                                        <div className="row">
+                                          <div className="col-12 col-lg-3 ms-0 pe-0">
+                                            <label className="form-check-label" htmlFor="currentCompany">
+                                              Current Company
+                                            </label>
+                                            <select
+                                              className="form-select form-select-sm"
+                                              name="currentCompany"
+                                              onChange={handleCurrent}
+                                              aria-label="Default select example"
+                                            >
+                                              <option value=""></option>
+                                              <option value="Cognizant">Cognizant</option>
+                                              <option value="Wipro">Wipro</option>
+                                              <option value="Zoho">Zoho</option>
+                                            </select>
                                           </div>
-                                        </>
+                                          <div className="col-12 col-lg-2 ms-0 pe-0">
+                                            <label className="form-check-label" htmlFor="currentRole">
+                                              Current Role
+                                            </label>
+                                            <select
+                                              className="form-select form-select-sm"
+                                              name="currentRole"
+                                              onChange={handleCurrent}
+                                              aria-label="Default select example"
+                                            >
+                                              <option value=""></option>
+                                              <option value="Admin">Admin</option>
+                                              <option value="UI Developer">UI Developer</option>
+                                              <option value="Java Developer">Java Developer</option>
+                                            </select>
+                                          </div>
+                                          <div className="col-12 col-lg-2 ms-0 pe-0">
+                                            <label className="form-check-label" htmlFor="currentDesignation">
+                                              Current Designation
+                                            </label>
+                                            <select
+                                              className="form-select form-select-sm"
+                                              name="currentDesignation"
+                                              onChange={handleCurrent}
+                                              aria-label="Default select example"
+                                            >
+                                              <option value=""></option>
+                                              <option value="Team Leader">Team Leader</option>
+                                              <option value="Project Manager">Project Manager</option>
+                                              <option value="Sales Manager">Sales Manager</option>
+                                            </select>
+                                          </div>
+                                          <div className="col-12 col-lg-2 ms-0 pe-0">
+                                            <label className="form-check-label" htmlFor="joinDate">
+                                              Join Date
+                                            </label>
+                                            <input
+                                              type="date"
+                                              className="form-control form-select-sm"
+                                              name="joinDate"
+                                              onChange={handleCurrent}
+                                              aria-label="Join Date"
+                                            />
+                                          </div>
+                                          <div className="col-12 col-lg-2 ms-0 pe-0">
+                                            <label className="form-check-label" htmlFor="noticePeriod">
+                                              Notice Period
+                                            </label>
+                                            <input
+                                              type="text"
+                                              className="form-control form-control-sm"
+                                              name="noticePeriod"
+                                              onChange={handleCurrent}
+                                              placeholder="Notice Period"
+                                            />
+                                          </div>
+                                        </div>                
                                       ) : (
                                         <>
                                           {lastCompany.map((company, index) => (
@@ -737,12 +783,12 @@ function SignUp() {
                                                   Last Company
                                                 </label>
                                                 <select
-                                                  className="form-select"
-                                                  name="lastCompanyName"
-                                                  value={company.lastCompanyName}
+                                                  className="form-select form-select-sm"
+                                                  name="lastCompany"
+                                                  value={company.lastCompany}
                                                   onChange={(e) => {
                                                     const newLastCompany = [...lastCompany];
-                                                    newLastCompany[index].lastCompanyName = e.target.value;
+                                                    newLastCompany[index].lastCompany = e.target.value;
                                                     setLastCompany(newLastCompany);
                                                   }}
                                                   aria-label="Default select example"
@@ -758,12 +804,12 @@ function SignUp() {
                                                   Last Role
                                                 </label>
                                                 <select
-                                                  className="form-select"
-                                                  name="lastRoleName"
-                                                  value={company.lastRoleName}
+                                                  className="form-select form-select-sm"
+                                                  name="lastRole"
+                                                  value={company.lastRole}
                                                   onChange={(e) => {
                                                     const newLastCompany = [...lastCompany];
-                                                    newLastCompany[index].lastRoleName = e.target.value;
+                                                    newLastCompany[index].lastRole = e.target.value;
                                                     setLastCompany(newLastCompany);
                                                   }}
                                                   aria-label="Default select example"
@@ -779,12 +825,12 @@ function SignUp() {
                                                   Last Designation
                                                 </label>
                                                 <select
-                                                  className="form-select"
-                                                  name="lastDesignationName"
-                                                  value={company.lastDesignationName}
+                                                  className="form-select form-select-sm"
+                                                  name="lastDesignation"
+                                                  value={company.lastDesignation}
                                                   onChange={(e) => {
                                                     const newLastCompany = [...lastCompany];
-                                                    newLastCompany[index].lastDesignationName = e.target.value;
+                                                    newLastCompany[index].lastDesignation = e.target.value;
                                                     setLastCompany(newLastCompany);
                                                   }}
                                                   aria-label="Default select example"
@@ -801,12 +847,12 @@ function SignUp() {
                                                 </label>
                                                 <input
                                                   type="date"
-                                                  className="form-control"
-                                                  name="joinDate"
-                                                  value={company.joinDate}
+                                                  className="form-control form-control-sm"
+                                                  name="lastJoiningDate"
+                                                  value={company.lastJoiningDate}
                                                   onChange={(e) => {
                                                     const newLastCompany = [...lastCompany];
-                                                    newLastCompany[index].joinDate = e.target.value;
+                                                    newLastCompany[index].lastJoiningDate = e.target.value;
                                                     setLastCompany(newLastCompany);
                                                   }}
                                                   aria-label="Join Date"
@@ -818,12 +864,12 @@ function SignUp() {
                                                 </label>
                                                 <input
                                                   type="date"
-                                                  className="form-control"
-                                                  name="relievingDate"
-                                                  value={company.relievingDate}
+                                                  className="form-control form-control-sm"
+                                                  name="lastRelievingDate"
+                                                  value={company.lastRelievingDate}
                                                   onChange={(e) => {
                                                     const newLastCompany = [...lastCompany];
-                                                    newLastCompany[index].relievingDate = e.target.value;
+                                                    newLastCompany[index].lastRelievingDate = e.target.value;
                                                     setLastCompany(newLastCompany);
                                                   }}
                                                   aria-label="Relieving Date"
@@ -855,7 +901,7 @@ function SignUp() {
                               <div className="accordion" id="accordionExample">
                                 <div className="accordion-item">
                                   <h2 className="accordion-header" id="headingTwo">
-                                    <button className="accordion-button bg-light" type="button" data-bs-toggle="collapse" style={{height: "45px", padding: "5px 10px"}} data-bs-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+                                    <button className="accordion-button bg-light" type="button" data-bs-toggle="collapse" style={{height: "40px", padding: "5px 10px"}} data-bs-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
                                       Highest Qualification
                                     </button>
                                   </h2>
@@ -868,7 +914,7 @@ function SignUp() {
                                               Qualification
                                             </label>
                                             <select 
-                                              className="form-control" 
+                                              className="form-control form-control-sm" 
                                               name={`qualification-${index}`}
                                               value={qualification.qualification}
                                               onChange={(e) => handleChange(qualification.id, 'qualification', e.target.value)}
@@ -879,14 +925,14 @@ function SignUp() {
                                             </select>
                                           </div>
                                           <div className="col-12 col-lg-3">
-                                            <label htmlFor={`educationName-${index}`} className="form-label">
+                                            <label htmlFor={`institutionName-${index}`} className="form-label">
                                               Education Name
                                             </label>
                                             <select 
-                                              className="form-control" 
-                                              name={`educationName-${index}`}
-                                              value={qualification.educationName}
-                                              onChange={(e) => handleChange(qualification.id, 'educationName', e.target.value)}
+                                              className="form-control form-control-sm" 
+                                              name={`institutionName-${index}`}
+                                              value={qualification.institutionName}
+                                              onChange={(e) => handleChange(qualification.id, 'institutionName', e.target.value)}
                                             >
                                               <option value="">Select</option>
                                               <option value="B.E">B.E</option>
@@ -894,16 +940,16 @@ function SignUp() {
                                             </select>
                                           </div>
                                           <div className="col-12 col-lg-3">
-                                            <label htmlFor={`passOutYear-${index}`} className="form-label">
+                                            <label htmlFor={`yearOfPassOut-${index}`} className="form-label">
                                               Year Of PassOut
                                             </label>
                                             <input
                                               type="date"
-                                              className="form-control"
-                                              id={`passOutYear-${index}`}
-                                              name="passOutYear"
-                                              value={qualification.passOutYear}
-                                              onChange={(e) => handleChange(qualification.id, 'passOutYear', e.target.value)}
+                                              className="form-control form-control-sm"
+                                              id={`yearOfPassOut-${index}`}
+                                              name="yearOfPassOut"
+                                              value={qualification.yearOfPassOut}
+                                              onChange={(e) => handleChange(qualification.id, 'yearOfPassOut', e.target.value)}
                                             />
                                           </div>
                                           <div className="col-12 col-lg-2">
@@ -913,7 +959,7 @@ function SignUp() {
                                             <input 
                                               type="text" 
                                               required
-                                              className="form-control" 
+                                              className="form-control form-control-sm" 
                                               name={`percentage-${index}`}
                                               placeholder="Percentage" 
                                               value={qualification.percentage}
