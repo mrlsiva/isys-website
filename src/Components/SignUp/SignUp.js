@@ -11,9 +11,11 @@ import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import jsonObject from './MockJsonCandidate';
 function SignUp() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { itProfessions,allIndustryProfessions,consultingAndITCompanies,itIndustryRoles,industryDesignations,itQualifications,indianInstitutes} =jsonObject;
   const initialAddressValues = {
     city: '',
     state: '',
@@ -592,10 +594,12 @@ function SignUp() {
                                   required
                                   aria-label="Default select example"
                                 >
-                                  <option selected></option>
-                                  <option value="Software Engineer">Software Engineer</option>
-                                  <option value="Hardware Engineer">Hardware Engineer</option>
-                                  <option value="HR Administrator">HR Administrator</option>
+                                  <option value="">Select a profession</option>
+                                    {itProfessions.map((profession) => (
+                                      <option key={profession.value} value={profession.value}>
+                                        {profession.label}
+                                      </option>
+                                    ))}
                                 </select>
                                 {errors.profession && (
                                   <div className="invalid-feedback">
@@ -615,10 +619,12 @@ function SignUp() {
                                  required
                                  className={`form-select form-select-sm ${errors.sector ? 'is-invalid' : ''}`}
                                  aria-label="Default select example">
-                                  <option selected></option>
-                                  <option value="1">One</option>
-                                  <option value="2">Two</option>
-                                  <option value="3">Three</option>
+                                  <option value="">Select a Industry</option>
+                                  {allIndustryProfessions.map((industry)=>(
+                                    <option key={industry.value} value={industry.value}>
+                                      {industry.label}
+                                    </option>
+                                  ))}
                                 </select>
                                 {errors.sector && (
                                   <div className="invalid-feedback">
@@ -711,10 +717,12 @@ function SignUp() {
                                               onChange={handleCurrent}
                                               aria-label="Default select example"
                                             >
-                                              <option value=""></option>
-                                              <option value="Cognizant">Cognizant</option>
-                                              <option value="Wipro">Wipro</option>
-                                              <option value="Zoho">Zoho</option>
+                                              <option value="">Select a Company</option>
+                                               {consultingAndITCompanies.map((company)=>(
+                                                  <option key={company.value} value={company.value}>
+                                                    {company.label}
+                                                  </option>
+                                                ))} 
                                             </select>
                                           </div>
                                           <div className="col-12 col-lg-2 ms-0 pe-0">
@@ -727,10 +735,12 @@ function SignUp() {
                                               onChange={handleCurrent}
                                               aria-label="Default select example"
                                             >
-                                              <option value=""></option>
-                                              <option value="Admin">Admin</option>
-                                              <option value="UI Developer">UI Developer</option>
-                                              <option value="Java Developer">Java Developer</option>
+                                              <option value="">Select a Role</option>
+                                               {itIndustryRoles.map((role)=>(
+                                                  <option key={role.value} value={role.value}>
+                                                    {role.label}
+                                                  </option>
+                                                ))} 
                                             </select>
                                           </div>
                                           <div className="col-12 col-lg-2 ms-0 pe-0">
@@ -743,10 +753,12 @@ function SignUp() {
                                               onChange={handleCurrent}
                                               aria-label="Default select example"
                                             >
-                                              <option value=""></option>
-                                              <option value="Team Leader">Team Leader</option>
-                                              <option value="Project Manager">Project Manager</option>
-                                              <option value="Sales Manager">Sales Manager</option>
+                                               <option value="">Select a Designation</option>
+                                               {industryDesignations.map((designation)=>(
+                                                  <option key={designation.value} value={designation.value}>
+                                                    {designation.label}
+                                                  </option>
+                                                ))} 
                                             </select>
                                           </div>
                                           <div className="col-12 col-lg-2 ms-0 pe-0">
@@ -793,10 +805,12 @@ function SignUp() {
                                                   }}
                                                   aria-label="Default select example"
                                                 >
-                                                  <option value=""></option>
-                                                  <option value="Cognizant">Cognizant</option>
-                                                  <option value="Wipro">Wipro</option>
-                                                  <option value="Zoho">Zoho</option>
+                                                  <option value="">Select a Company</option>
+                                                  {consultingAndITCompanies.map((company)=>(
+                                                      <option key={company.value} value={company.value}>
+                                                        {company.label}
+                                                      </option>
+                                                    ))} 
                                                 </select>
                                               </div>
                                               <div className="col-12 col-lg-2 ms-0 pe-0">
@@ -814,10 +828,12 @@ function SignUp() {
                                                   }}
                                                   aria-label="Default select example"
                                                 >
-                                                  <option value=""></option>
-                                                  <option value="Admin">Admin</option>
-                                                  <option value="UI Developer">UI Developer</option>
-                                                  <option value="Java Developer">Java Developer</option>
+                                                  <option value="">Select a Role</option>
+                                                   {itIndustryRoles.map((role)=>(
+                                                  <option key={role.value} value={role.value}>
+                                                    {role.label}
+                                                  </option>
+                                                ))} 
                                                 </select>
                                               </div>
                                               <div className="col-12 col-lg-2 ms-0 pe-0">
@@ -835,10 +851,12 @@ function SignUp() {
                                                   }}
                                                   aria-label="Default select example"
                                                 >
-                                                  <option value=""></option>
-                                                  <option value="Team Leader">Team Leader</option>
-                                                  <option value="Project Manager">Project Manager</option>
-                                                  <option value="Sales Manager">Sales Manager</option>
+                                                  <option value="">Select a Designation</option>
+                                                   {industryDesignations.map((designation)=>(
+                                                  <option key={designation.value} value={designation.value}>
+                                                    {designation.label}
+                                                  </option>
+                                                ))} 
                                                 </select>
                                               </div>
                                               <div className="col-12 col-lg-2 ms-0 pe-0">
@@ -919,14 +937,17 @@ function SignUp() {
                                               value={qualification.qualification}
                                               onChange={(e) => handleChange(qualification.id, 'qualification', e.target.value)}
                                             >
-                                              <option value="">Select</option>
-                                              <option value="B.E">B.E</option>
-                                              <option value="M.E">M.E</option>
+                                                <option value="">Select a Qualification</option>
+                                                   {itQualifications.map((qualif)=>(
+                                                  <option key={qualif.value} value={qualif.value}>
+                                                    {qualif.label}
+                                                  </option>
+                                                ))} 
                                             </select>
                                           </div>
                                           <div className="col-12 col-lg-3">
                                             <label htmlFor={`institutionName-${index}`} className="form-label">
-                                              Education Name
+                                              Institute Name
                                             </label>
                                             <select 
                                               className="form-control form-control-sm" 
@@ -934,9 +955,12 @@ function SignUp() {
                                               value={qualification.institutionName}
                                               onChange={(e) => handleChange(qualification.id, 'institutionName', e.target.value)}
                                             >
-                                              <option value="">Select</option>
-                                              <option value="B.E">B.E</option>
-                                              <option value="M.E">M.E</option>
+                                               <option value="">Select a Institute Name</option>
+                                                   {indianInstitutes.map((Institute)=>(
+                                                  <option key={Institute.value} value={Institute.value}>
+                                                    {Institute.label}
+                                                  </option>
+                                                ))} 
                                             </select>
                                           </div>
                                           <div className="col-12 col-lg-3">
@@ -991,7 +1015,7 @@ function SignUp() {
                           <div className="d-flex justify-content-end">
                             <input
                               type="submit"
-                              className="btn btn-primary bg-primary p-3"
+                              className="btn btn-primary bg-primary register-btn-style"
                               disabled={visible}
                               value="Register"
                             />
