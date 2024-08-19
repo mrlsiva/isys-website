@@ -12,7 +12,22 @@ import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import jsonObject from './MockJsonCandidate';
+import mainLogo from '../../assets/img/home3/logo.png';
+import MobileMenu from "../Header/MobileMenu";
+import FooterTwo from '../Footer/FooterTwo';
 function SignUp() {
+  const [search, setSearch] = useState(true);
+  const [offset, setOffset] = useState(true)
+  const [mobileMenu, setMobileMenu] = useState(true);
+  
+  const handleOffset = (e) => {
+    e.preventDefault();
+    setOffset(!offset);
+  }
+
+  const handleMobileMenu = () => {
+    setMobileMenu(!mobileMenu);
+  }
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { itProfessions,allIndustryProfessions,consultingAndITCompanies,itIndustryRoles,industryDesignations,itQualifications,indianInstitutes} =jsonObject;
@@ -85,13 +100,13 @@ function SignUp() {
   const [fileLimit,setFileLimit]=useState(false)
   const MAX_COUNT =5;
   const [qualifications, setQualifications] = useState([
-    { id: 1, qualification: '', institutionName: '', yearOfPassOut: '', percentage: '' }
+    { id: 1, qualification: '', institutionName: '', yearOfPassOut: '', percentage: '',candidateId:'string' }
   ]);
   const [currentCompany,setCurrentCompany] = useState([
-    {id:1, currentCompany:'',currentRole:'',currentDesignation:'',joiningDate:'',noticePeriod:''}
+    {id:1, currentCompany:'',currentRole:'',currentDesignation:'',joiningDate:'',noticePeriod:'',candidateId:'string'}
   ])
   const [lastCompany, setLastCompany] = useState([
-    { id: 1, lastCompany: '', lastRole: '', lastDesignation: '', lastJoiningDate: '', lastRelievingDate: '' },
+    { id: 1, lastCompanyName: '', lastRole: '', lastDesignation: '', lastJoiningDate: '', lastRelievingDate: '',candidateId:'string' },
   ]);
   const handleCheckExperience = (e) => {
     setIsFresher(e.target.checked);
@@ -250,7 +265,7 @@ function SignUp() {
   const handleAddMoreDegree = () => {
     setQualifications([
       ...qualifications, 
-      { id: qualifications.length + 1, qualification: '', institutionName: '', yearOfPassOut: '', percentage: ''  }
+      { id: qualifications.length + 1, qualification: '', institutionName: '', yearOfPassOut: '', percentage: '',candidateId:'string'  }
     ]);
   };
 
@@ -287,9 +302,10 @@ function SignUp() {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Access-Control-Allow-Headers': 'Content-Type',
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
+            'accept': 'application/json',
+            // 'Access-Control-Allow-Headers': 'Content-Type',
+            // 'Access-Control-Allow-Origin': '*',
+            // 'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
           },
         });
 
@@ -314,7 +330,7 @@ function SignUp() {
   const handleAddMoreCurrentCompany = () => {
     setCurrentCompany([
       ...currentCompany,
-      { id: currentCompany.length + 1, currentCompany:'',currentRole:'',currentDesignation:'',joiningDate:'',noticePeriod:'' },
+      { id: currentCompany.length + 1, currentCompany:'',currentRole:'',currentDesignation:'',joiningDate:'',noticePeriod:'',candidateId:'string' },
     ]);
   };
 
@@ -324,7 +340,7 @@ function SignUp() {
   const handleAddMoreLastCompany = () => {
     setLastCompany([
       ...lastCompany,
-      { id: lastCompany.length + 1, lastCompany: '', lastRole: '', lastDesignation: '', lastJoiningDate: '', lastRelievingDate: '' },
+      { id: lastCompany.length + 1, lastCompanyName: '', lastRole: '', lastDesignation: '', lastJoiningDate: '', lastRelievingDate: '',candidateId:'string' },
     ]);
   };
 
@@ -352,53 +368,50 @@ function SignUp() {
       lastName:formValues.lastName,
       emailId:formValues.emailId,
       mobileNumber:"7639651113",
-      passWord:'' ,
-      gender: formValues.gender,
-      companyName:'',
-      profession:formValues.profession,
-      role:'',
-      designation:'',
+      code:"string",
+      password:'string' ,
       experienceFresher:isFresher?isFresher:false,
       totalExperience:formValues.totalexp?formValues.totalexp:"string",
-      industry:formValues.sector,
-      degree:'',
+      degree:'string',
       resume:'string',
-      resumeDownloadUrl: "string",
       country:area.countryId,
       state:area.stateId,
       city: area.cityId,
-      candidateType:"",
-      candidateTypeName: "",
-      candidateExperiences:isWorking ? removeIdField(curCompany) : removeIdField(lasCompany),
-      candidateQualifications: removeIdField(qualifications)
+      gender: formValues.gender,
+      candidateType:"string",
+      profession:formValues.profession,
+      industry:formValues.sector,
+      role: "Backend Developer",
+      designation: "Java",
+      candidateExperiencesList:isWorking ? removeIdField(curCompany) : removeIdField(lasCompany),
+      candidateQualificationList: removeIdField(qualifications)
     }
     console.log("final data",finalData)
    
     let Fullurl=constants.CANDIDATE+'candidate/save'
-    var json=JSON.stringify(finalData)
-        const blob = new Blob([json], {
-        type:"application/json"
-      })
+    // var json=JSON.stringify(finalData)
+    //     const blob = new Blob([json], {
+    //     type:"application/json"
+    //   })
      
-      // console.log("blob value...",blob)
-       var bodyFormData = new FormData();
-       bodyFormData.append("contract", blob);
-       for (let i = 0; i < uploadedFiles?.length; i++) {
-        bodyFormData.append("documentList", uploadedFiles[i]);
-      }
-  
-      console.log("formData",bodyFormData)
+    //   // console.log("blob value...",blob)
+    //    var bodyFormData = new FormData();
+    //    bodyFormData.append("contract", blob);
+    //    for (let i = 0; i < uploadedFiles?.length; i++) {
+    //     bodyFormData.append("documentList", uploadedFiles[i]);
+    //   }
       try {
         let res = await fetch(Fullurl, {
           method: 'POST',
           headers: {
-            'Content-Type': 'multipart/form-data',
-            // 'Content-Type': 'application/json',
-            // "Access-Control-Allow-Headers" : "Content-Type",
-            // "Access-Control-Allow-Origin": "*",
+            // 'Content-Type': 'multipart/form-data',
+            'accept': 'application/json',
+            'Content-Type': 'application/json',
+            "Access-Control-Allow-Headers" : "Content-Type",
+            "Access-Control-Allow-Origin": "*",
             // "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
           },
-          body: bodyFormData
+          body: JSON.stringify(finalData),
         });
       
         if (res.ok) { // Simplified the status check
@@ -427,7 +440,62 @@ function SignUp() {
 
   return (
     <div className="wrapper">
-      <div className="section-authentication-signin d-flex align-items-center justify-content-center my-5 my-lg-0">
+      <div className="section-authentication-signin d-flex align-items-center justify-content-center my- my-lg-0">
+        <header className="header-wrap header-1 sticky-top">
+          <div className="container-fluid d-flex justify-content-between align-items-center">
+              <div className="logo">
+                  <Link to='/'>
+                      <img src={mainLogo} alt="logo"/>
+                  </Link>
+              </div>
+              <div className="header-right-area d-flex justify-content-between">
+                  <div className="main-menu d-none d-xl-block me-xl-5">
+                      <ul>
+                          <li><a href="/">Home </a>
+                              {/* <ul className="sub-menu">
+                                  <li><Link to="/">homepage 1</Link></li>
+                                  <li><Link to="/homeTwo">homepage 2</Link></li>
+                                  <li><Link to="/homeThree">homepage 3</Link></li>
+                                  <li><Link to="/homeFour">homepage 4</Link></li>
+                              </ul> */}
+                          </li>
+                          <li><Link to="/about">about us</Link></li>
+                          <li><Link to="/services">Services</Link></li>
+                          {/* <li><a href="#">Pages <i className="fal fa-plus"></i></a>
+                              <ul className="sub-menu">
+                                  <li><Link to="/Team">team</Link></li>
+                                  <li><Link to="/faq">faq</Link></li>
+                                  <li><Link to="/projects">projects</Link></li>
+                                  <li><Link to="/pricing">Pricing</Link></li>
+                              </ul>
+                          </li> */}
+                          <li><Link to="/career">Career</Link></li>
+                          <li><Link to="/contact">Contact</Link></li>
+                          {/* <li>
+                              <a href="#" onClick={handleSearch} className="search-btn"><i className="fas fa-search"></i></a>
+                              <div className={search ? 'search-box' : 'search-box show'}>
+                                  <form action="#">
+                                      <input type="text" placeholder="Search"/>
+                                      <button type="submit"><i className="fal fa-search"></i></button>
+                                  </form>
+                              </div>
+                          </li> */}
+                      </ul>
+                  </div>
+                  <div className="header-right-elements d-flex align-items-center justify-content-between">
+                      <div className="d-inline-block ms-4 d-xl-none">
+                          <div className="mobile-nav-wrap">                    
+                              <div id="hamburger" onClick={handleMobileMenu}>
+                                  <i className="fal fa-bars"></i>
+                              </div>
+                              <MobileMenu mobileMenu={mobileMenu} handleMobileMenu={handleMobileMenu} />
+                          </div>
+                          <div className="overlay"></div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+        </header>
         <div className="container-fluid">
               <div className="card mb-0 bg-light">
                 <div className="card-body">
@@ -796,11 +864,11 @@ function SignUp() {
                                                 </label>
                                                 <select
                                                   className="form-select form-select-sm"
-                                                  name="lastCompany"
-                                                  value={company.lastCompany}
+                                                  name="lastCompanyName"
+                                                  value={company.lastCompanyName}
                                                   onChange={(e) => {
                                                     const newLastCompany = [...lastCompany];
-                                                    newLastCompany[index].lastCompany = e.target.value;
+                                                    newLastCompany[index].lastCompanyName = e.target.value;
                                                     setLastCompany(newLastCompany);
                                                   }}
                                                   aria-label="Default select example"
@@ -1031,6 +1099,9 @@ function SignUp() {
                 </div>
               </div>
         
+        </div>
+        <div className="container-fluid">
+        <FooterTwo/>
         </div>
       </div>
     </div>
