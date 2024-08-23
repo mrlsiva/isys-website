@@ -24,7 +24,7 @@ const HeaderThree = () => {
   return (
     <>
     <OffsetMenu offset={offset} handleOffset={handleOffset}  />
-    <header className="header-wrap header-1 sticky-top">
+    <header className="header-wrap header-1 sticky-top p-1">
         <div className="container-fluid d-flex justify-content-between align-items-center">
             <div className="logo">
                 <Link to='/'>

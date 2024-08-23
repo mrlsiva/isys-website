@@ -93,110 +93,17 @@ const itProfessions = [
     { label: "Executive Director", value: "Executive Director" },
   ];
   const allIndustryProfessions = [
-    // Finance and Accounting
-    { label: "Accountant", value: "Accountant" },
-    { label: "Financial Analyst", value: "Financial Analyst" },
-    { label: "Investment Banker", value: "Investment Banker" },
-    { label: "Auditor", value: "Auditor" },
-    { label: "Treasury Manager", value: "Treasury Manager" },
-  
-    // Technology and IT
-    { label: "Software Engineer", value: "Software Engineer" },
-    { label: "Web Developer", value: "Web Developer" },
-    { label: "Data Scientist", value: "Data Scientist" },
-    { label: "Cybersecurity Specialist", value: "Cybersecurity Specialist" },
-    { label: "Network Engineer", value: "Network Engineer" },
-  
-    // Healthcare
-    { label: "Doctor", value: "Doctor" },
-    { label: "Nurse", value: "Nurse" },
-    { label: "Pharmacist", value: "Pharmacist" },
-    { label: "Healthcare Administrator", value: "Healthcare Administrator" },
-    { label: "Medical Laboratory Technician", value: "Medical Laboratory Technician" },
-  
-    // Marketing and Sales
-    { label: "Marketing Manager", value: "Marketing Manager" },
-    { label: "Sales Manager", value: "Sales Manager" },
-    { label: "Digital Marketing Specialist", value: "Digital Marketing Specialist" },
-    { label: "Brand Manager", value: "Brand Manager" },
-    { label: "Market Research Analyst", value: "Market Research Analyst" },
-  
-    // Human Resources
-    { label: "Human Resources Manager", value: "Human Resources Manager" },
-    { label: "Recruiter", value: "Recruiter" },
-    { label: "HR Specialist", value: "HR Specialist" },
-    { label: "Training and Development Manager", value: "Training and Development Manager" },
-    { label: "Compensation and Benefits Manager", value: "Compensation and Benefits Manager" },
-  
-    // Operations and Supply Chain
-    { label: "Operations Manager", value: "Operations Manager" },
-    { label: "Supply Chain Manager", value: "Supply Chain Manager" },
-    { label: "Logistics Coordinator", value: "Logistics Coordinator" },
-    { label: "Procurement Manager", value: "Procurement Manager" },
-    { label: "Warehouse Manager", value: "Warehouse Manager" },
-  
-    // Education
-    { label: "Teacher", value: "Teacher" },
-    { label: "Professor", value: "Professor" },
-    { label: "School Administrator", value: "School Administrator" },
-    { label: "Educational Consultant", value: "Educational Consultant" },
-    { label: "Instructional Designer", value: "Instructional Designer" },
-  
-    // Legal
-    { label: "Lawyer", value: "Lawyer" },
-    { label: "Paralegal", value: "Paralegal" },
-    { label: "Legal Secretary", value: "Legal Secretary" },
-    { label: "Compliance Officer", value: "Compliance Officer" },
-    { label: "Corporate Counsel", value: "Corporate Counsel" },
-  
-    // Manufacturing and Engineering
-    { label: "Mechanical Engineer", value: "Mechanical Engineer" },
-    { label: "Electrical Engineer", value: "Electrical Engineer" },
-    { label: "Industrial Engineer", value: "Industrial Engineer" },
-    { label: "Manufacturing Manager", value: "Manufacturing Manager" },
-    { label: "Quality Assurance Engineer", value: "Quality Assurance Engineer" },
-  
-    // Media and Communications
-    { label: "Journalist", value: "Journalist" },
-    { label: "Public Relations Specialist", value: "Public Relations Specialist" },
-    { label: "Graphic Designer", value: "Graphic Designer" },
-    { label: "Content Writer", value: "Content Writer" },
-    { label: "Social Media Manager", value: "Social Media Manager" },
-  
-    // Hospitality and Tourism
-    { label: "Hotel Manager", value: "Hotel Manager" },
-    { label: "Event Planner", value: "Event Planner" },
-    { label: "Travel Agent", value: "Travel Agent" },
-    { label: "Tour Guide", value: "Tour Guide" },
-    { label: "Chef", value: "Chef" },
-  
-    // Construction and Real Estate
-    { label: "Construction Manager", value: "Construction Manager" },
-    { label: "Architect", value: "Architect" },
-    { label: "Civil Engineer", value: "Civil Engineer" },
-    { label: "Real Estate Agent", value: "Real Estate Agent" },
-    { label: "Property Manager", value: "Property Manager" },
-  
-    // Arts and Entertainment
-    { label: "Artist", value: "Artist" },
-    { label: "Musician", value: "Musician" },
-    { label: "Actor", value: "Actor" },
-    { label: "Film Director", value: "Film Director" },
-    { label: "Producer", value: "Producer" },
-  
-    // Government and Public Administration
-    { label: "Policy Analyst", value: "Policy Analyst" },
-    { label: "Government Relations Manager", value: "Government Relations Manager" },
-    { label: "Urban Planner", value: "Urban Planner" },
-    { label: "Diplomat", value: "Diplomat" },
-    { label: "Public Affairs Specialist", value: "Public Affairs Specialist" },
-  
-    // Environmental and Natural Resources
-    { label: "Environmental Engineer", value: "Environmental Engineer" },
-    { label: "Conservation Scientist", value: "Conservation Scientist" },
-    { label: "Geologist", value: "Geologist" },
-    { label: "Marine Biologist", value: "Marine Biologist" },
-    { label: "Forester", value: "Forester" },
+    { label: "Automobile", value: "Automobile" },
+    { label: "IT Industry", value: "IT Industry" },
+    { label: "Banking", value: "Banking" },
+    { label: "HealthCare", value: "HealthCare" },
+    { label: "Capital Goals", value: "Capital Goals" },
+    { label: "E-Commerce", value: "E-Commerce" },
+    { label: "Manufacturing", value: "Manufacturing" },
+    { label: "Construction", value: "Construction" },
+    { label: "Biotechnology", value: "Biotechnology" },
+    { label: "Financial Service", value: "Financial Service" },
+    { label: "Aviation", value: "Aviation" },
   ];
   const consultingAndITCompanies = [
     { label: "Wipro", value: "Wipro" },

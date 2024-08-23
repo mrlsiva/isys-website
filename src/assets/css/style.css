@@ -2233,10 +2233,9 @@ header ul, header li, footer ul, footer li {
 
 @media (max-width: 767px) {
   .preloader .animation-preloader .txt-loading {
-    font-size: 2.5em;
+    font-size: 8rem;
   }
 }
-
 .preloader .animation-preloader .txt-loading .letters-loading {
   color: #FF5E14;
   position: relative;

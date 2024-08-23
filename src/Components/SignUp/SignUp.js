@@ -15,6 +15,9 @@ import jsonObject from './MockJsonCandidate';
 import mainLogo from '../../assets/img/home3/logo.png';
 import MobileMenu from "../Header/MobileMenu";
 import FooterTwo from '../Footer/FooterTwo';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
 function SignUp() {
   const [search, setSearch] = useState(true);
   const [offset, setOffset] = useState(true)
@@ -45,7 +48,7 @@ function SignUp() {
     degree:'',
     experience:'',
     profession:'',
-    sector:'',
+    sector:[],
     totalexp:'',
     position:'',
     totalExperience:'',
@@ -82,9 +85,7 @@ function SignUp() {
     joinDate: '',
     noticePeriod: '',
   });
-  const [isFresher, setIsFresher] = useState(false); // Separate state for the checkbox
-
- 
+  const [isFresher, setIsFresher] = useState(false);
   const [data, setData] = useState([])
   const [countryOptions, setCountryOptions] = useState([])
   const [getcityName,setCityName]=useState('')
@@ -108,6 +109,8 @@ function SignUp() {
   const [lastCompany, setLastCompany] = useState([
     { id: 1, lastCompanyName: '', lastRole: '', lastDesignation: '', lastJoiningDate: '', lastRelievingDate: '',candidateId:'string' },
   ]);
+  const [industry,setIndustry] = useState([])
+
   const handleCheckExperience = (e) => {
     setIsFresher(e.target.checked);
   };
@@ -165,6 +168,31 @@ function SignUp() {
       [name]: value,
     })
   }
+  //collect industry
+  useEffect(() => {
+    let fullurl = constants.CANDIDATE + 'industry/findAll'
+    console.log("fullurl",fullurl)
+    async function fetchData() {
+      axios.get(fullurl, {
+          headers: {
+            //Authorization: AccessToken,
+            'Content-Type': 'application/json',
+            // 'Access-Control-Allow-Origin': '*',
+            // 'Access-Control-Allow-Headers': '*',
+          },
+        })
+        .then((response) => {
+          const finalData = response.data
+          setIndustry(finalData)
+         
+        })
+       .catch((error) => {
+        })
+        console.log("state",data)
+    }
+    fetchData()
+  }, [])
+// country state city
   useEffect(() => {
     let fullurl = constants.EORMURL + 'countries'
     console.log("fullurl",fullurl)
@@ -308,7 +336,6 @@ function SignUp() {
             // 'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
           },
         });
-
         if (res.ok) {
           let response = await res.json();
           setTimeout(() => {
@@ -333,7 +360,42 @@ function SignUp() {
       { id: currentCompany.length + 1, currentCompany:'',currentRole:'',currentDesignation:'',joiningDate:'',noticePeriod:'',candidateId:'string' },
     ]);
   };
+  const handleDateChange = (e, index, dateType) => {
+    const newLastCompany = [...lastCompany];
+    const newDateValue = e.target.value;
 
+    if (dateType === 'lastJoiningDate') {
+      // Validate Join Date vs Relieving Date
+      if (newLastCompany[index].lastRelievingDate && new Date(newDateValue) > new Date(newLastCompany[index].lastRelievingDate)) {
+        alert('Joining Date cannot be after Relieving Date');
+        return;
+      }
+      newLastCompany[index].lastJoiningDate = newDateValue;
+    } else if (dateType === 'lastRelievingDate') {
+      // Validate Relieving Date vs Join Date
+      if (newLastCompany[index].lastJoiningDate && new Date(newDateValue) < new Date(newLastCompany[index].lastJoiningDate)) {
+        alert('Relieving must not be less than a Joining Date');
+        return;
+      }
+      newLastCompany[index].lastRelievingDate = newDateValue;
+    }
+
+    setLastCompany(newLastCompany);
+  };
+  const handleSectorEvent = (event) => {
+    const selectedValues = event.target.value; 
+    const selectedIndustries = industry.filter(ind => selectedValues.includes(ind.name));
+    const selectedData = selectedIndustries.map(ind => ({
+      id: ind.id,
+      value: ind.name,
+    }));
+
+    setFormValues(prevValues => ({
+      ...prevValues,
+      sector: selectedData, // This now contains an array of objects with both id and name
+    }));
+  };
+  
   const handleRemoveCurrentCompany = (id) => {
     setCurrentCompany(currentCompany.filter(company => company.id !== id));
   };
@@ -380,38 +442,38 @@ function SignUp() {
       gender: formValues.gender,
       candidateType:"string",
       profession:formValues.profession,
-      industry:formValues.sector,
-      role: "Backend Developer",
-      designation: "Java",
+      industryId:formValues.sector?.map((item)=>item?.id),
+      industryName:formValues.sector?.map((item)=>item?.value),
+      role: "string",
+      designation: "string",
       candidateExperiencesList:isWorking ? removeIdField(curCompany) : removeIdField(lasCompany),
       candidateQualificationList: removeIdField(qualifications)
     }
     console.log("final data",finalData)
    
     let Fullurl=constants.CANDIDATE+'candidate/save'
-    // var json=JSON.stringify(finalData)
-    //     const blob = new Blob([json], {
-    //     type:"application/json"
-    //   })
-     
-    //   // console.log("blob value...",blob)
-    //    var bodyFormData = new FormData();
-    //    bodyFormData.append("contract", blob);
-    //    for (let i = 0; i < uploadedFiles?.length; i++) {
-    //     bodyFormData.append("documentList", uploadedFiles[i]);
-    //   }
+    var json=JSON.stringify(finalData)
+        const blob = new Blob([json], {
+        type:"application/json"
+      })
+       var bodyFormData = new FormData();
+       bodyFormData.append("candidate", blob);
+       for (let i = 0; i < uploadedFiles?.length; i++) {
+        bodyFormData.append("documentList", uploadedFiles[i]);
+      }
       try {
         let res = await fetch(Fullurl, {
           method: 'POST',
           headers: {
             // 'Content-Type': 'multipart/form-data',
-            'accept': 'application/json',
-            'Content-Type': 'application/json',
-            "Access-Control-Allow-Headers" : "Content-Type",
-            "Access-Control-Allow-Origin": "*",
+            // 'accept': 'application/json',
+            // 'Content-Type': 'application/json',
+            // "Access-Control-Allow-Headers" : "Content-Type",
+            // "Access-Control-Allow-Origin": "*",
             // "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
           },
-          body: JSON.stringify(finalData),
+          body: bodyFormData,
+          type: 'multipart/form-data'
         });
       
         if (res.ok) { // Simplified the status check
@@ -441,7 +503,7 @@ function SignUp() {
   return (
     <div className="wrapper">
       <div className="section-authentication-signin d-flex align-items-center justify-content-center my- my-lg-0">
-        <header className="header-wrap header-1 sticky-top">
+        <header className="header-wrap header-1 sticky-top p-1">
           <div className="container-fluid d-flex justify-content-between align-items-center">
               <div className="logo">
                   <Link to='/'>
@@ -496,7 +558,7 @@ function SignUp() {
               </div>
           </div>
         </header>
-        <div className="container-fluid">
+          <div className="container-fluid">
               <div className="card mb-0 bg-light">
                 <div className="card-body">
                   <div className="p-1">  
@@ -583,7 +645,6 @@ function SignUp() {
                                 )}
                               </div>
                             </div>
-                          
                             <div className="row">
                               <div className="col-12 col-lg-3">
                                 <label htmlFor="degree" className="form-label mb-0">Gender</label>
@@ -604,9 +665,7 @@ function SignUp() {
                                     {errors.gender}
                                   </div>
                                 )}
-                              </div>
-
-                            
+                              </div>                            
                               <div className="col-12 col-lg-3">
                                   <label htmlFor="degree" className="form-label mb-0">Country</label>
                                   <select className="form-control form-control-sm" value={communicationaddress.countryId}
@@ -675,31 +734,34 @@ function SignUp() {
                                   </div>
                                 )}
                               </div>
-
-                              <div className="col-12 col-lg-3 ">
-                                 <label className="form-check-label mb-0" for="flexCheckDefault">
-                                    Sector
-                                  </label>
-                                <select class="form-select" 
-                                 onChange={handleEvent}
-                                 onBlur={handleBlur}
-                                 name="sector"
-                                 required
-                                 className={`form-select form-select-sm ${errors.sector ? 'is-invalid' : ''}`}
-                                 aria-label="Default select example">
-                                  <option value="">Select a Industry</option>
-                                  {allIndustryProfessions.map((industry)=>(
-                                    <option key={industry.value} value={industry.value}>
-                                      {industry.label}
-                                    </option>
+                              <div className="col-12 col-lg-3">
+                              <FormControl sx={{minWidth: "100%"}}>
+                                <label className="form-check-label mb-0" htmlFor="sector">
+                                  Sector
+                                </label>
+                                <Select
+                                  multiple
+                                  value={formValues.sector.map(sector => sector.value)}
+                                  onChange={(event) => handleSectorEvent(event)}
+                                  renderValue={(selected) => selected.join(', ')}
+                                  className={`${errors.sector ? 'is-invalid' : ''}`}
+                                  sx={{ height: '2rem' }} 
+                                >
+                                  {industry.map((industry) => (
+                                    <MenuItem key={industry.id} value={industry.name}>
+                                      {industry.name}
+                                    </MenuItem>
                                   ))}
-                                </select>
+                                </Select>
                                 {errors.sector && (
                                   <div className="invalid-feedback">
                                     {errors.sector}
                                   </div>
                                 )}
+                                </FormControl>
                               </div>
+
+
                               <div className="col-12 col-lg-3">
                                  <label className="form-check-label mb-0" for="flexCheckDefault">
                                     Upload Resume
@@ -720,7 +782,7 @@ function SignUp() {
                             <div className="row">
                                 <div className="col-12 col-lg-12 ms-0 pe-0 text-end">
                                   <div className="form-check d-flex justify-content-end align-items-center">
-                                    <label className="form-check-label me-4" htmlFor="flexCheckDefault">
+                                    <label className="form-check-label me-5" htmlFor="flexCheckDefault">
                                       Are You Fresher
                                     </label>
                                     <input
@@ -734,6 +796,99 @@ function SignUp() {
                                   </div>
                                 </div>
                               </div>
+                              <div className="row mt-2">
+                              <div className="accordion" id="accordionExample">
+                                <div className="accordion-item">
+                                  <h2 className="accordion-header" id="headingTwo">
+                                    <button className="accordion-button bg-light" type="button" data-bs-toggle="collapse" style={{height: "40px", padding: "5px 10px"}} data-bs-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+                                      Highest Qualification
+                                    </button>
+                                  </h2>
+                                  <div id="collapseTwo" className="accordion-collapse collapse show" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                                  <div className="accordion-body">
+                                      {qualifications.map((qualification, index) => (
+                                        <div className="row" key={qualification.id}>
+                                          <div className="col-12 col-lg-3">
+                                            <label htmlFor={`degree-${index}`} className="form-label">
+                                              Qualification
+                                            </label>
+                                            <select 
+                                              className="form-control form-control-sm" 
+                                              name={`qualification-${index}`}
+                                              value={qualification.qualification}
+                                              onChange={(e) => handleChange(qualification.id, 'qualification', e.target.value)}
+                                            >
+                                                <option value="">Select a Qualification</option>
+                                                   {itQualifications.map((qualif)=>(
+                                                  <option key={qualif.value} value={qualif.value}>
+                                                    {qualif.label}
+                                                  </option>
+                                                ))} 
+                                            </select>
+                                          </div>
+                                          <div className="col-12 col-lg-3">
+                                            <label htmlFor={`institutionName-${index}`} className="form-label">
+                                              Institute Name
+                                            </label>
+                                            <select 
+                                              className="form-control form-control-sm" 
+                                              name={`institutionName-${index}`}
+                                              value={qualification.institutionName}
+                                              onChange={(e) => handleChange(qualification.id, 'institutionName', e.target.value)}
+                                            >
+                                               <option value="">Select a Institute Name</option>
+                                                   {indianInstitutes.map((Institute)=>(
+                                                  <option key={Institute.value} value={Institute.value}>
+                                                    {Institute.label}
+                                                  </option>
+                                                ))} 
+                                            </select>
+                                          </div>
+                                          <div className="col-12 col-lg-3">
+                                            <label htmlFor={`yearOfPassOut-${index}`} className="form-label">
+                                              Year Of PassOut
+                                            </label>
+                                            <input
+                                              type="date"
+                                              className="form-control form-control-sm"
+                                              id={`yearOfPassOut-${index}`}
+                                              name="yearOfPassOut"
+                                              value={qualification.yearOfPassOut}
+                                              onChange={(e) => handleChange(qualification.id, 'yearOfPassOut', e.target.value)}
+                                            />
+                                          </div>
+                                          <div className="col-12 col-lg-2">
+                                            <label htmlFor={`percentage-${index}`} className="form-label">
+                                              Percentage
+                                            </label>
+                                            <input 
+                                              type="text" 
+                                              required
+                                              className="form-control form-control-sm" 
+                                              name={`percentage-${index}`}
+                                              placeholder="Percentage" 
+                                              value={qualification.percentage}
+                                              onChange={(e) => handleChange(qualification.id, 'percentage', e.target.value)}
+                                            />
+                                          </div>
+                                          <div className="col-12 col-lg-1 text-end">
+                                            <button 
+                                              className="delete-button" 
+                                              onClick={() => handleRemoveDegree(qualification.id)}
+                                            >
+                                              <FontAwesomeIcon icon={faTrash} className='text-danger' />
+                                            </button>
+                                          </div>
+                                        </div>
+                                      ))}
+                                      <div className="row">
+                                        <p className='text-primary' onClick={handleAddMoreDegree}>+ Add More Degree</p>    
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
                             <div className="row mt-2 mb-4">
                               <div className="accordion" id="accordionExample">
                                 <div className="accordion-item">
@@ -927,6 +1082,7 @@ function SignUp() {
                                                 ))} 
                                                 </select>
                                               </div>
+                                          
                                               <div className="col-12 col-lg-2 ms-0 pe-0">
                                                 <label className="form-check-label" htmlFor={`joinDate-${index}`}>
                                                   Join Date
@@ -936,11 +1092,7 @@ function SignUp() {
                                                   className="form-control form-control-sm"
                                                   name="lastJoiningDate"
                                                   value={company.lastJoiningDate}
-                                                  onChange={(e) => {
-                                                    const newLastCompany = [...lastCompany];
-                                                    newLastCompany[index].lastJoiningDate = e.target.value;
-                                                    setLastCompany(newLastCompany);
-                                                  }}
+                                                  onChange={(e) => handleDateChange(e, index, 'lastJoiningDate')}
                                                   aria-label="Join Date"
                                                 />
                                               </div>
@@ -953,14 +1105,11 @@ function SignUp() {
                                                   className="form-control form-control-sm"
                                                   name="lastRelievingDate"
                                                   value={company.lastRelievingDate}
-                                                  onChange={(e) => {
-                                                    const newLastCompany = [...lastCompany];
-                                                    newLastCompany[index].lastRelievingDate = e.target.value;
-                                                    setLastCompany(newLastCompany);
-                                                  }}
+                                                  onChange={(e) => handleDateChange(e, index, 'lastRelievingDate')}
                                                   aria-label="Relieving Date"
                                                 />
                                               </div>
+                                          
                                               <div className="col-12 col-lg-1 text-end">
                                                 <button
                                                   className="delete-current-button"
@@ -973,7 +1122,7 @@ function SignUp() {
                                           ))}
                                           <div className="row">
                                             <p className="text-primary" onClick={handleAddMoreLastCompany}>
-                                              + Add More
+                                              + Add More Exp
                                             </p>
                                           </div>
                                         </>
@@ -983,99 +1132,7 @@ function SignUp() {
                                 </div>
                               </div>
                             </div>
-                            <div className="row mt-2">
-                              <div className="accordion" id="accordionExample">
-                                <div className="accordion-item">
-                                  <h2 className="accordion-header" id="headingTwo">
-                                    <button className="accordion-button bg-light" type="button" data-bs-toggle="collapse" style={{height: "40px", padding: "5px 10px"}} data-bs-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-                                      Highest Qualification
-                                    </button>
-                                  </h2>
-                                  <div id="collapseTwo" className="accordion-collapse collapse show" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
-                                  <div className="accordion-body">
-                                      {qualifications.map((qualification, index) => (
-                                        <div className="row" key={qualification.id}>
-                                          <div className="col-12 col-lg-3">
-                                            <label htmlFor={`degree-${index}`} className="form-label">
-                                              Qualification
-                                            </label>
-                                            <select 
-                                              className="form-control form-control-sm" 
-                                              name={`qualification-${index}`}
-                                              value={qualification.qualification}
-                                              onChange={(e) => handleChange(qualification.id, 'qualification', e.target.value)}
-                                            >
-                                                <option value="">Select a Qualification</option>
-                                                   {itQualifications.map((qualif)=>(
-                                                  <option key={qualif.value} value={qualif.value}>
-                                                    {qualif.label}
-                                                  </option>
-                                                ))} 
-                                            </select>
-                                          </div>
-                                          <div className="col-12 col-lg-3">
-                                            <label htmlFor={`institutionName-${index}`} className="form-label">
-                                              Institute Name
-                                            </label>
-                                            <select 
-                                              className="form-control form-control-sm" 
-                                              name={`institutionName-${index}`}
-                                              value={qualification.institutionName}
-                                              onChange={(e) => handleChange(qualification.id, 'institutionName', e.target.value)}
-                                            >
-                                               <option value="">Select a Institute Name</option>
-                                                   {indianInstitutes.map((Institute)=>(
-                                                  <option key={Institute.value} value={Institute.value}>
-                                                    {Institute.label}
-                                                  </option>
-                                                ))} 
-                                            </select>
-                                          </div>
-                                          <div className="col-12 col-lg-3">
-                                            <label htmlFor={`yearOfPassOut-${index}`} className="form-label">
-                                              Year Of PassOut
-                                            </label>
-                                            <input
-                                              type="date"
-                                              className="form-control form-control-sm"
-                                              id={`yearOfPassOut-${index}`}
-                                              name="yearOfPassOut"
-                                              value={qualification.yearOfPassOut}
-                                              onChange={(e) => handleChange(qualification.id, 'yearOfPassOut', e.target.value)}
-                                            />
-                                          </div>
-                                          <div className="col-12 col-lg-2">
-                                            <label htmlFor={`percentage-${index}`} className="form-label">
-                                              Percentage
-                                            </label>
-                                            <input 
-                                              type="text" 
-                                              required
-                                              className="form-control form-control-sm" 
-                                              name={`percentage-${index}`}
-                                              placeholder="Percentage" 
-                                              value={qualification.percentage}
-                                              onChange={(e) => handleChange(qualification.id, 'percentage', e.target.value)}
-                                            />
-                                          </div>
-                                          <div className="col-12 col-lg-1 text-end">
-                                            <button 
-                                              className="delete-button" 
-                                              onClick={() => handleRemoveDegree(qualification.id)}
-                                            >
-                                              <FontAwesomeIcon icon={faTrash} className='text-danger' />
-                                            </button>
-                                          </div>
-                                        </div>
-                                      ))}
-                                      <div className="row">
-                                        <p className='text-primary' onClick={handleAddMoreDegree}>+ Add More Degree</p>    
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
+                           
                   
                           </div>
                         </div>
