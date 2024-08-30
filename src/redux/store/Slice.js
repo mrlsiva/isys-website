@@ -10,12 +10,10 @@ const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    signUpUser: (state, action) => {
-      // Handle the sign-up logic here
-      console.log("signup",state)
+    signUpUser: (state, action) => { 
       state.user = action.payload;
+      console.log("signup after update", state.user);
     },
-    // other reducers
   },
 });
 
