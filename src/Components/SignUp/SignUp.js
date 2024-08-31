@@ -5,7 +5,7 @@ import 'boxicons/css/boxicons.min.css';
 import './signup.css'
 import { Link } from 'react-router-dom';
 import axios from 'axios'
-import { useDispatch } from 'react-redux';
+import { useSelector,useDispatch } from 'react-redux';
 import { signUpUser } from '../../redux/store/Slice';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
@@ -24,15 +24,15 @@ function SignUp() {
   const [offset, setOffset] = useState(true)
   const [mobileMenu, setMobileMenu] = useState(true);
   const dispatch = useDispatch();
+  const userCandidate = useSelector((state) => state.user.user); 
+  console.log("user candidate",userCandidate)
   const handleOffset = (e) => {
     e.preventDefault();
     setOffset(!offset);
   }
-
   const handleMobileMenu = () => {
     setMobileMenu(!mobileMenu);
   }
-  
   const navigate = useNavigate();
   const { itProfessions,allIndustryProfessions,consultingAndITCompanies,itIndustryRoles,industryDesignations,itQualifications,indianInstitutes} =jsonObject;
   const initialAddressValues = {
@@ -40,9 +40,10 @@ function SignUp() {
     state: '',
     country: '',
   }
+
   const [formValues, setFormValues] = useState({
-    firstName: '',
-    lastName: '',
+    firstName:'',
+    lastName:'',
     emailId:'',
     phoneNumber:'',
     gender:'',
@@ -53,8 +54,8 @@ function SignUp() {
     totalexp:'',
     position:'',
     totalExperience:'',
-
   });
+
   const [area,setArea]=useState({
     countryId:'',
     stateId:'',
@@ -86,6 +87,56 @@ function SignUp() {
     joinDate: '',
     noticePeriod: '',
   });
+
+  useEffect(() => {
+ 
+    if (userCandidate) {
+      console.log("Updating", userCandidate);
+      // const sectorId = userCandidate.industryId.map(indId=>indId)
+      // const sectorName = userCandidate.industryName.map(indName=>indName)
+      const sectorData = userCandidate.industryId.map((id, index) => ({
+        id: id,
+        label: userCandidate.industryName[index],
+        value: userCandidate.industryName[index], // Assuming value is the same as label here
+      }));
+      setFormValues(prevValues => ({
+        ...prevValues,
+        firstName: userCandidate.firstName,
+        lastName:userCandidate.lastName,
+        emailId:userCandidate.emailId,
+        gender:userCandidate.gender,
+        phoneNumber:userCandidate.mobileNumber,
+        degree:'',
+        experience:userCandidate.experience,
+        profession:userCandidate.profession,
+        sector:sectorData,
+        totalExperience:formValues.totalExperience,
+      }));
+    
+      const qualificationsData = userCandidate.candidateQualificationList.map((qual) => ({
+        id: qual.id,
+        qualification: qual.qualification,
+        institutionName: qual.institutionName,
+        yearOfPassOut: qual.yearOfPassOut.split('T')[0],
+        percentage: qual.percentage,
+        candidateId: qual.candidateId,
+    }));
+
+    setQualifications(qualificationsData);
+    const formattedData = userCandidate.candidateExperiencesList.map((experience) => ({
+      id: experience.id,
+      lastCompanyName: experience.lastCompanyName,
+      lastRole: experience.lastRole,
+      lastDesignation: experience.lastDesignation,
+      lastJoiningDate: experience.lastJoiningDate.split('T')[0], // format date to YYYY-MM-DD
+      lastRelievingDate: experience.lastRelievingDate.split('T')[0], // format date to YYYY-MM-DD
+      candidateId: experience.candidateId,
+    }));
+
+    setLastCompany(formattedData);
+    }
+  }, [userCandidate]);
+
   const [isFresher, setIsFresher] = useState(false);
   const [data, setData] = useState([])
   const [countryOptions, setCountryOptions] = useState([])
@@ -351,33 +402,34 @@ function SignUp() {
       }
     };
     // if (userCode) {
-    //   verifyCandidate();
-    //   let fullurl = constants.CANDIDATE + `candidate/findCandidateById/${userCode}`
-    //   console.log("fullurl",fullurl)
-    //   async function fetchData() {
-    //     axios.get(fullurl, {
-    //         headers: {
-    //           //Authorization: AccessToken,
-    //           'Content-Type': 'application/json',
-    //           // 'Access-Control-Allow-Origin': '*',
-    //           // 'Access-Control-Allow-Headers': '*',
-    //         },
-    //       })
-    //       .then((response) => {
-    //         const finalData = response.data
-    //         dispatch(signUpUser(finalData));
+      verifyCandidate();
+      // let fullurl = constants.CANDIDATE + `candidate/findCandidateById/${userCode}`
+      // let fullurl = constants.CANDIDATE + `candidate/findCandidateById/92bc9f65-704b-4e5d-81aa-a7f52e14000d`
+   
+      // console.log("fullurl",fullurl)
+      // async function fetchData() {
+      //   axios.get(fullurl, {
+      //       headers: {
+      //         //Authorization: AccessToken,
+      //         'Content-Type': 'application/json',
+      //         // 'Access-Control-Allow-Origin': '*',
+      //         // 'Access-Control-Allow-Headers': '*',
+      //       },
+      //     })
+      //     .then((response) => {
+      //       const finalData = response.data
+      //       dispatch(signUpUser(finalData));
 
-    //       })
-    //      .catch((error) => {
-    //       })
-    //       console.log("state",data)
-    //   }
-    //   fetchData()
-    // }
-  }, [userCode,dispatch]);
+      //     })
+      //    .catch((error) => {
+      //     })
+      //     console.log("state",data)
+      // }
+      // fetchData()
+    //}
+  }, []);
 
   useEffect(() => {
-  
       let fullurl = constants.CANDIDATE + `candidate/findCandidateById/92bc9f65-704b-4e5d-81aa-a7f52e14000d`
       console.log("fullurl",fullurl)
       async function fetchData() {
@@ -544,6 +596,7 @@ function SignUp() {
 
   return (
     <div className="wrapper">
+    {console.log("form values...",formValues)}
       <div className="section-authentication-signin d-flex align-items-center justify-content-center my- my-lg-0">
         <header className="header-wrap header-1 sticky-top p-1">
           <div className="container-fluid d-flex justify-content-between align-items-center">
@@ -607,7 +660,7 @@ function SignUp() {
                     <div className="text-center mb-4">
                       <h5 className="headerStyle">Candidate Registration</h5>
                     </div>
-                    <div className="form-body">
+                      <div className="form-body">
                       <form className="row g-3" onSubmit={submitSignUpUser}>
                         <div className="col-12 d-flex gap-2">
                           <div className="container-fluid">
@@ -617,7 +670,7 @@ function SignUp() {
                                 <input 
                                 type="text" 
                                 required
-                                values={formValues.firstName}
+                                value={formValues.firstName}
                                 className={`form-control form-control-sm ${touched.firstName &&errors.firstName ? 'error-input' : ''}`} 
                                 name="firstName" 
                                 onBlur={handleBlur} 
@@ -635,6 +688,7 @@ function SignUp() {
                                 <input 
                                   type="text" 
                                   required
+                                  value={formValues.lastName}
                                   className={`form-control form-control-sm ${touched.lastName &&errors.lastName ? 'error-input' : ''}`} 
                                   name="lastName"  
                                   onChange={handleEvent} 
@@ -652,6 +706,7 @@ function SignUp() {
                                 <input 
                                   type="email" 
                                   required
+                                  value={formValues.emailId}
                                   className={`form-control form-control-sm ${touched.emailId &&errors.emailId ? 'error-input' : ''}`} 
                                   name="emailId"  
                                   onChange={handleEvent} 
@@ -673,6 +728,7 @@ function SignUp() {
                                   <input
                                     type="number"
                                     required
+                                    value={formValues.phoneNumber}
                                     className={`form-control form-control-sm ${touched.phoneNumber && errors.phoneNumber ? 'error-input' : ''}`} 
                                     name="phoneNumber"
                                     minLength="10"
@@ -759,6 +815,7 @@ function SignUp() {
                                 <select
                                   className={`form-select form-select-sm ${errors.profession ? 'is-invalid' : ''}`}
                                   name="profession"
+                                  value={formValues.profession}
                                   onChange={handleEvent}
                                   onBlur={handleBlur}
                                   required
@@ -784,7 +841,7 @@ function SignUp() {
                                 </label>
                                 <Select
                                   multiple
-                                  value={formValues.sector.map(sector => sector.value)}
+                                  value={formValues.sector?.map((sector) => sector.label)}
                                   onChange={(event) => handleSectorEvent(event)}
                                   renderValue={(selected) => selected.join(', ')}
                                   className={`${errors.sector ? 'is-invalid' : ''}`}
@@ -950,6 +1007,7 @@ function SignUp() {
                                           <input 
                                             type="text" 
                                             required
+                                            value={formValues.totalExperience}
                                             className="form-control form-control-sm" 
                                             onChange={handleEvent}
                                             name="totalExperience" 
@@ -1175,8 +1233,6 @@ function SignUp() {
                                 </div>
                               </div>
                             </div>
-                           
-                  
                           </div>
                         </div>
                         <div className="col-12">
@@ -1195,10 +1251,11 @@ function SignUp() {
                         </div>
                       </form>
                     </div>
+                 
+                   
                   </div>
                 </div>
               </div>
-        
            </div>
           <div className="container-fluid">
         <FooterTwo/>
