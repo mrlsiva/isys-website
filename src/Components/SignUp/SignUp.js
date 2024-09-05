@@ -25,6 +25,8 @@ function SignUp() {
   const [mobileMenu, setMobileMenu] = useState(true);
   const dispatch = useDispatch();
   const userCandidate = useSelector((state) => state.user.user); 
+  const [updateBtnEnable, setupdateBtnEnable] = useState(true);
+  const [registerBtnEnable, setRegisterBtnEnable] = useState(false);
   console.log("user candidate",userCandidate)
   const handleOffset = (e) => {
     e.preventDefault();
@@ -36,11 +38,10 @@ function SignUp() {
   const navigate = useNavigate();
   const { itProfessions,allIndustryProfessions,consultingAndITCompanies,itIndustryRoles,industryDesignations,itQualifications,indianInstitutes} =jsonObject;
   const initialAddressValues = {
-    city: '',
-    state: '',
-    country: '',
+    cityId: '',
+    stateId: '',
+    countryId: '',
   }
-
   const [formValues, setFormValues] = useState({
     firstName:'',
     lastName:'',
@@ -54,6 +55,7 @@ function SignUp() {
     totalexp:'',
     position:'',
     totalExperience:'',
+    experienceFresher:''
   });
 
   const [area,setArea]=useState({
@@ -89,8 +91,7 @@ function SignUp() {
   });
 
   useEffect(() => {
- 
-    if (userCandidate) {
+    if (userCandidate?.length>0) {
       console.log("Updating", userCandidate);
       // const sectorId = userCandidate.industryId.map(indId=>indId)
       // const sectorName = userCandidate.industryName.map(indName=>indName)
@@ -101,42 +102,55 @@ function SignUp() {
       }));
       setFormValues(prevValues => ({
         ...prevValues,
-        firstName: userCandidate.firstName,
-        lastName:userCandidate.lastName,
-        emailId:userCandidate.emailId,
-        gender:userCandidate.gender,
-        phoneNumber:userCandidate.mobileNumber,
+        firstName: userCandidate.firstName?userCandidate.firstName:'',
+        lastName:userCandidate.lastName?userCandidate.lastName:'',
+        emailId:userCandidate.emailId?userCandidate.emailId:'',
+        gender:userCandidate.gender?userCandidate.gender:'',
+        phoneNumber:userCandidate.mobileNumber?userCandidate.mobileNumber:'',
         degree:'',
-        experience:userCandidate.experience,
-        profession:userCandidate.profession,
-        sector:sectorData,
-        totalExperience:formValues.totalExperience,
+        experience:userCandidate.experience?userCandidate.experience:'',
+        profession:userCandidate.profession?userCandidate.profession:'',
+        sector:sectorData?sectorData:'',
+        totalExperience:userCandidate.totalExperience?userCandidate.totalExperience:'',
+        experienceFresher:setIsFresher(formValues.experienceFresher)
       }));
-    
-      const qualificationsData = userCandidate.candidateQualificationList.map((qual) => ({
-        id: qual.id,
-        qualification: qual.qualification,
-        institutionName: qual.institutionName,
-        yearOfPassOut: qual.yearOfPassOut.split('T')[0],
-        percentage: qual.percentage,
-        candidateId: qual.candidateId,
+      setcommunicationaddress({
+        countryId:userCandidate.countryId,
+        stateId:userCandidate.stateId,
+        cityId: userCandidate.cityId
+      }) 
+      const qualificationsData = userCandidate?.candidateQualificationList.map((qual) => ({
+        id: qual.id?qual.id:'',
+        qualification: qual.qualification?qual.qualification:'',
+        institutionName: qual.institutionName?qual.institutionName:'',
+        yearOfPassOut: qual.yearOfPassOut||'',
+        percentage: qual.percentage?qual.percentage:'',
+        candidateId: qual.candidateId ?qual.candidateId:'',
     }));
-
     setQualifications(qualificationsData);
-    const formattedData = userCandidate.candidateExperiencesList.map((experience) => ({
-      id: experience.id,
-      lastCompanyName: experience.lastCompanyName,
-      lastRole: experience.lastRole,
-      lastDesignation: experience.lastDesignation,
-      lastJoiningDate: experience.lastJoiningDate.split('T')[0], // format date to YYYY-MM-DD
-      lastRelievingDate: experience.lastRelievingDate.split('T')[0], // format date to YYYY-MM-DD
-      candidateId: experience.candidateId,
+    const formattedData = userCandidate?.candidateExperiencesList?.map((experience) => ({
+      id: experience.id?experience.id:'',
+      lastCompanyName: experience.lastCompanyName?experience.lastCompanyName:'',
+      lastRole: experience.lastRole?experience.lastRole:'',
+      lastDesignation: experience.lastDesignation?experience.lastDesignation:'',
+      lastJoiningDate: experience.lastJoiningDate, // format date to YYYY-MM-DD
+      lastRelievingDate: experience.lastRelievingDate, // format date to YYYY-MM-DD
+      candidateId: experience.candidateId?experience.candidateId:'',
     }));
-
     setLastCompany(formattedData);
     }
+    const formattedCompanyData = userCandidate?.candidateExperiencesList?.map((experience) => ({
+      id: experience.id?experience.id:'',
+      currentCompany: experience.currentCompany?experience.currentCompany:'',
+      currentRole: experience.currentRole?experience.currentRole:'',
+      currentDesignation: experience.currentDesignation?experience.currentDesignation:'',
+      joiningDate: experience.joiningDate, // format date to YYYY-MM-DD
+      noticePeriod: experience.noticePeriod, // format date to YYYY-MM-DD
+      candidateId: experience.candidateId?experience.candidateId:'',
+    }));
+    setCurrentCompany(formattedCompanyData);
+    
   }, [userCandidate]);
-
   const [isFresher, setIsFresher] = useState(false);
   const [data, setData] = useState([])
   const [countryOptions, setCountryOptions] = useState([])
@@ -146,7 +160,6 @@ function SignUp() {
   const [stateOptionsForCommunication, setStateOptionsForCommunication] = useState([])
   const [communicationaddress, setcommunicationaddress] = useState(initialAddressValues)
   const [getstateName,setStateName]=useState('')
-  const [visible,setVisible]= useState(false)
   const [userCode,setUserCode] = useState("")
   const [isWorking, setIsWorking] = useState(false);
   const [uploadedFiles,setUploadedFiles] = useState([])
@@ -162,7 +175,9 @@ function SignUp() {
     { id: 1, lastCompanyName: '', lastRole: '', lastDesignation: '', lastJoiningDate: '', lastRelievingDate: '',candidateId:'string' },
   ]);
   const [industry,setIndustry] = useState([])
-
+  const[countryId,setCountryId] =useState('')
+  const[stateId,setStateId] =useState('')
+  const[cityId,setCityId] =useState('')
   const handleCheckExperience = (e) => {
     setIsFresher(e.target.checked);
   };
@@ -174,24 +189,19 @@ function SignUp() {
     return array.map((item) => ({ label: item[keyLabel], value: item[keyValue] }))
   }
   function handleInputsetcommunicationaddress(e) {
-    console.log(e)
-    const { name, value,label } = e.target
-    const selectedLabel = e.target.options[e.target.selectedIndex].text;
-
-    setArea((prevState) => ({
-      ...prevState,
-      [name]: selectedLabel,
-    }))
+    const { name, value } = e.target
     if(name==='cityId')
     {
       const selectedCityId = e.target.value;
     const selectedCityName = e.target.options[e.target.selectedIndex].text;
+      setCityId(e.target.options[e.target.selectedIndex].value)
       setCityName(selectedCityName)
     }
     switch (name) {
       case 'countryId': {
         const [curCountry] = data.filter((country) => country.countryId === +value)
-        
+        console.log("country id",curCountry)
+        setCountryId(curCountry.countryId)
         setCountryName(curCountry.countryName)
        
         setStateOptionsForCommunication(
@@ -205,46 +215,20 @@ function SignUp() {
           (country) => country.countryId === +communicationaddress.countryId,
         )
         const [curState] = (curCountry?.states ?? []).filter((state) => state.stateId === +value)
+        setStateId(curState.stateId)
         setStateName(curState.stateName)
         setCityOptionsForCommunication(
-          getDropdownOptions(curState?.cities ?? [], 'cityName', 'cityId'),
-          
+          getDropdownOptions(curState?.cities ?? [], 'cityName', 'cityId'), 
         )
-
         break
       }
-    
     }
     setcommunicationaddress({
       ...communicationaddress,
       [name]: value,
     })
   }
-  //collect industry
-  useEffect(() => {
-    let fullurl = constants.CANDIDATE + 'industry/findAll'
-    console.log("fullurl",fullurl)
-    async function fetchData() {
-      axios.get(fullurl, {
-          headers: {
-            //Authorization: AccessToken,
-            'Content-Type': 'application/json',
-            // 'Access-Control-Allow-Origin': '*',
-            // 'Access-Control-Allow-Headers': '*',
-          },
-        })
-        .then((response) => {
-          const finalData = response.data
-          setIndustry(finalData)
-         
-        })
-       .catch((error) => {
-        })
-        console.log("state",data)
-    }
-    fetchData()
-  }, [])
-// country state city
+
   useEffect(() => {
     let fullurl = constants.EORMURL + 'countries'
     console.log("fullurl",fullurl)
@@ -267,8 +251,26 @@ function SignUp() {
         console.log("state",data)
     }
     fetchData()
+    let fullurlIndustry = constants.CANDIDATE + 'industry/findAll'
+    async function fetchDataIndustry() {
+      axios.get(fullurlIndustry, {
+          headers: {
+            //Authorization: AccessToken,
+            'Content-Type': 'application/json',
+            // 'Access-Control-Allow-Origin': '*',
+            // 'Access-Control-Allow-Headers': '*',
+          },
+        })
+        .then((response) => {
+          const finalData = response.data
+          setIndustry(finalData)
+        })
+       .catch((error) => {
+        })
+        console.log("state",data)
+    }
+    fetchDataIndustry()
   }, [])
-
   const handleEvent = (e) => {
     const { name, value, type, checked } = e.target;
     console.log("name:", name, "value:", value, "type:", type, "checked:", checked);
@@ -286,6 +288,7 @@ function SignUp() {
       }
     } else if (name === 'phoneNumber') {
       // Phone number validation
+      console.log("value",value)
       const phonePattern = /^[0-9]{10}$/;
       if (value.length === 10) {
         if (!phonePattern.test(value)) {
@@ -327,7 +330,6 @@ function SignUp() {
     );
     setQualifications(updatedQualifications);
   };
-
   const handleBlur = (e) => {
     const { name, value } = e.target;
     setTouched({ ...touched, [name]: true });
@@ -335,20 +337,18 @@ function SignUp() {
       setErrors({ ...errors, [name]: 'Please fill the required field' });
     } 
   };
-  const handleGenderBlur = () => {
-    setTouched({ ...touched, gender: true });
-    if (!formValues.gender) {
-      setErrors({ ...errors, gender: 'Please select your gender' });
-    }
-  };
-
+  // const handleGenderBlur = () => {
+  //   setTouched({ ...touched, gender: true });
+  //   if (!formValues.gender) {
+  //     setErrors({ ...errors, gender: 'Please select your gender' });
+  //   }
+  // };
   const handleAddMoreDegree = () => {
     setQualifications([
       ...qualifications, 
       { id: qualifications.length + 1, qualification: '', institutionName: '', yearOfPassOut: '', percentage: '',candidateId:'string'  }
     ]);
   };
-
   const handleRemoveDegree = (id) => {
     setQualifications(qualifications.filter(qualification => qualification.id !== id));
   };
@@ -372,10 +372,9 @@ function SignUp() {
   const handleFileChange = (e)=>{
     const chosenFiles = Array.from(e.target.files);
     handleUploadedFiles(chosenFiles);
-}
+  }
   useEffect(() => {
     const verifyCandidate = async () => {
-      console.log("userCode", userCode);
       let Fullurl = `${constants.CANDIDATE}verifyCandidate/{candidate}?candidateId=${userCode}&isVerify=true`;
       try {
         let res = await fetch(Fullurl, {
@@ -401,36 +400,11 @@ function SignUp() {
         console.error('Error:', error);
       }
     };
-    // if (userCode) {
+    if (userCode) {
       verifyCandidate();
-      // let fullurl = constants.CANDIDATE + `candidate/findCandidateById/${userCode}`
-      // let fullurl = constants.CANDIDATE + `candidate/findCandidateById/92bc9f65-704b-4e5d-81aa-a7f52e14000d`
-   
-      // console.log("fullurl",fullurl)
-      // async function fetchData() {
-      //   axios.get(fullurl, {
-      //       headers: {
-      //         //Authorization: AccessToken,
-      //         'Content-Type': 'application/json',
-      //         // 'Access-Control-Allow-Origin': '*',
-      //         // 'Access-Control-Allow-Headers': '*',
-      //       },
-      //     })
-      //     .then((response) => {
-      //       const finalData = response.data
-      //       dispatch(signUpUser(finalData));
-
-      //     })
-      //    .catch((error) => {
-      //     })
-      //     console.log("state",data)
-      // }
-      // fetchData()
-    //}
-  }, []);
-
-  useEffect(() => {
-      let fullurl = constants.CANDIDATE + `candidate/findCandidateById/92bc9f65-704b-4e5d-81aa-a7f52e14000d`
+      setRegisterBtnEnable(true)
+      setupdateBtnEnable(false)
+      let fullurl = constants.CANDIDATE + `candidate/findCandidateById/${userCode}`
       console.log("fullurl",fullurl)
       async function fetchData() {
         axios.get(fullurl, {
@@ -443,15 +417,17 @@ function SignUp() {
           })
           .then((response) => {
             const finalData = response.data
-            console.log("finaldata",finalData)
             dispatch(signUpUser(finalData));
+
           })
          .catch((error) => {
           })
-      
+          console.log("state",data)
       }
       fetchData()
-  }, []);
+    }
+  }, [userCode]);
+
   const handleAddMoreCurrentCompany = () => {
     setCurrentCompany([
       ...currentCompany,
@@ -509,11 +485,11 @@ function SignUp() {
   };
   const submitSignUpUser=async (e)=>{
     e.preventDefault()
-    const curCompany = currentCompany.map(item => ({
+    const curCompany = currentCompany?.map(item => ({
       ...item,  
       currentlyWorking: isWorking  
     }));
-    const lasCompany=lastCompany.map(item =>({
+    const lasCompany=lastCompany?.map(item =>({
       ...item,
       currentlyWorking: isWorking,
     }))
@@ -523,16 +499,19 @@ function SignUp() {
       firstName:formValues.firstName,
       lastName:formValues.lastName,
       emailId:formValues.emailId,
-      mobileNumber:"7639651113",
+      mobileNumber:formValues.phoneNumber,
       code:"string",
       password:'string' ,
       experienceFresher:isFresher?isFresher:false,
-      totalExperience:formValues.totalexp?formValues.totalexp:"string",
+      totalExperience:formValues.totalExperience?formValues.totalExperience:"string",
       degree:'string',
       resume:'string',
-      country:area.countryId,
-      state:area.stateId,
+      country:getcountryName,
+      countryId:countryId,
+      state:getstateName,
+      stateId:stateId,
       city: area.cityId,
+      cityId:getcityName,
       gender: formValues.gender,
       candidateType:"string",
       profession:formValues.profession,
@@ -593,10 +572,8 @@ function SignUp() {
     //   area
     // }));
   }
-
   return (
     <div className="wrapper">
-    {console.log("form values...",formValues)}
       <div className="section-authentication-signin d-flex align-items-center justify-content-center my- my-lg-0">
         <header className="header-wrap header-1 sticky-top p-1">
           <div className="container-fluid d-flex justify-content-between align-items-center">
@@ -728,21 +705,22 @@ function SignUp() {
                                   <input
                                     type="number"
                                     required
-                                    value={formValues.phoneNumber}
+                                   
                                     className={`form-control form-control-sm ${touched.phoneNumber && errors.phoneNumber ? 'error-input' : ''}`} 
                                     name="phoneNumber"
-                                    minLength="10"
+                                    maxLength="10"
                                     onBlur={handleBlur}
                                     onKeyUp={handleEvent}
                                     placeholder="Phone No"
                                   />
-                                  </div>
+                                </div>
                                 {errors.phoneNumber && touched.phoneNumber && (
                                   <span className="text-danger" id="phoneNumberValidationError">
                                     {errors.phoneNumber}
                                   </span>
                                 )}
                               </div>
+
                             </div>
                             <div className="row">
                               <div className="col-12 col-lg-3">
@@ -773,7 +751,7 @@ function SignUp() {
                                   <option value="">Select Country</option>
                                     {countryOptions.map((country) => (
                                       <option key={country.value} value={country.value}>
-                                        {country.label}
+                                        {country.label?country.label:communicationaddress.countryId}
                                       </option>
                                     ))}
                                   </select>
@@ -841,7 +819,7 @@ function SignUp() {
                                 </label>
                                 <Select
                                   multiple
-                                  value={formValues.sector?.map((sector) => sector.label)}
+                                  value={formValues.sector?.map((sector) => sector.value)}
                                   onChange={(event) => handleSectorEvent(event)}
                                   renderValue={(selected) => selected.join(', ')}
                                   className={`${errors.sector ? 'is-invalid' : ''}`}
@@ -889,7 +867,7 @@ function SignUp() {
                                       className="form-check-input form-check-input-sm me-3"
                                       type="checkbox"
                                       onChange={handleCheckExperience}
-                                      checked={isFresher}
+                                      checked={ isFresher} 
                                       name="experience"
                                       id="flexCheckDefault"
                                     />                       
@@ -1240,8 +1218,14 @@ function SignUp() {
                             <input
                               type="submit"
                               className="btn btn-primary bg-primary register-btn-style"
-                              disabled={visible}
+                              disabled={registerBtnEnable}
                               value="Register"
+                            />
+                            <input
+                              type="submit"
+                              className="btn btn-primary bg-primary register-btn-style"
+                              disabled={updateBtnEnable}
+                              value="Update"
                             />
                           </div>
                         </div>
@@ -1251,8 +1235,6 @@ function SignUp() {
                         </div>
                       </form>
                     </div>
-                 
-                   
                   </div>
                 </div>
               </div>
@@ -1264,5 +1246,4 @@ function SignUp() {
     </div>
   )
 }
-
 export default SignUp
