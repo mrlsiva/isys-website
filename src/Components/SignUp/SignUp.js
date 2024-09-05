@@ -1,5 +1,4 @@
 import React, { useState,useEffect } from 'react';
-import Logo from '../../assets/img/home3/logo.png';
 import constants from '../../constants/Constants'
 import 'boxicons/css/boxicons.min.css';
 import './signup.css'
@@ -18,16 +17,13 @@ import FooterTwo from '../Footer/FooterTwo';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
-
 function SignUp() {
-  const [search, setSearch] = useState(true);
   const [offset, setOffset] = useState(true)
   const [mobileMenu, setMobileMenu] = useState(true);
   const dispatch = useDispatch();
   const userCandidate = useSelector((state) => state.user.user); 
   const [updateBtnEnable, setupdateBtnEnable] = useState(true);
   const [registerBtnEnable, setRegisterBtnEnable] = useState(false);
-  console.log("user candidate",userCandidate)
   const handleOffset = (e) => {
     e.preventDefault();
     setOffset(!offset);
@@ -37,68 +33,18 @@ function SignUp() {
   }
   const navigate = useNavigate();
   const { itProfessions,allIndustryProfessions,consultingAndITCompanies,itIndustryRoles,industryDesignations,itQualifications,indianInstitutes} =jsonObject;
-  const initialAddressValues = {
-    cityId: '',
-    stateId: '',
-    countryId: '',
-  }
-  const [formValues, setFormValues] = useState({
-    firstName:'',
-    lastName:'',
-    emailId:'',
-    phoneNumber:'',
-    gender:'',
-    degree:'',
-    experience:'',
-    profession:'',
-    sector:[],
-    totalexp:'',
-    position:'',
-    totalExperience:'',
-    experienceFresher:''
-  });
-
-  const [area,setArea]=useState({
-    countryId:'',
-    stateId:'',
-    cityId:''
-  })
-  const [errors, setErrors] = useState({
-    firstName: '',
-    lastName: '',
-    emailId:'',
-    phoneNumber:'',
-    gender:'',
-    profession:'',
-    sector:''
-   
-  });
-  const [touched, setTouched] = useState({
-    firstName: false,
-    lastName: false,
-    emailId: false,
-    phoneNumber: false,
-    gender:false,
-    profession:'',
-    sector:''
-  });
-  const [current, setCurrent] = useState({
-    currentCompanyName: '',
-    currentRoleName: '',
-    currentDesignationName: '',
-    joinDate: '',
-    noticePeriod: '',
-  });
-
+  const initialAddressValues = { cityId: '',stateId: '',countryId: '',}
+  const [formValues, setFormValues] = useState({firstName:'',lastName:'',emailId:'',phoneNumber:'',gender:'',degree:'',experience:'',profession:'',sector:[],
+  totalexp:'',position:'',totalExperience:'',experienceFresher:''});
+  const [area,setArea]=useState({countryId:'',stateId:'',cityId:''})
+  const [errors, setErrors] = useState({firstName: '',lastName: '',emailId:'',phoneNumber:'',gender:'',profession:'',sector:''});
+  const [touched, setTouched] = useState({firstName: false,lastName: false,emailId: false,phoneNumber: false,gender:false,profession:'',sector:''});
+  const [current, setCurrent] = useState({currentCompanyName: '',currentRoleName: '',currentDesignationName: '',joinDate: '',noticePeriod: '',});
   useEffect(() => {
     if (userCandidate?.length>0) {
-      console.log("Updating", userCandidate);
-      // const sectorId = userCandidate.industryId.map(indId=>indId)
-      // const sectorName = userCandidate.industryName.map(indName=>indName)
-      const sectorData = userCandidate.industryId.map((id, index) => ({
-        id: id,
+      const sectorData = userCandidate.industryId.map((id, index) => ({id: id,
         label: userCandidate.industryName[index],
-        value: userCandidate.industryName[index], // Assuming value is the same as label here
+        value: userCandidate.industryName[index],
       }));
       setFormValues(prevValues => ({
         ...prevValues,
@@ -149,7 +95,6 @@ function SignUp() {
       candidateId: experience.candidateId?experience.candidateId:'',
     }));
     setCurrentCompany(formattedCompanyData);
-    
   }, [userCandidate]);
   const [isFresher, setIsFresher] = useState(false);
   const [data, setData] = useState([])
@@ -228,10 +173,8 @@ function SignUp() {
       [name]: value,
     })
   }
-
   useEffect(() => {
     let fullurl = constants.EORMURL + 'countries'
-    console.log("fullurl",fullurl)
     async function fetchData() {
       axios.get(fullurl, {
           headers: {
@@ -248,7 +191,6 @@ function SignUp() {
         })
        .catch((error) => {
         })
-        console.log("state",data)
     }
     fetchData()
     let fullurlIndustry = constants.CANDIDATE + 'industry/findAll'
@@ -273,11 +215,8 @@ function SignUp() {
   }, [])
   const handleEvent = (e) => {
     const { name, value, type, checked } = e.target;
-    console.log("name:", name, "value:", value, "type:", type, "checked:", checked);
     if (type === 'checkbox') {
-      // Update form values based on checkbox
-      setFormValues({ ...formValues, [name]: checked ? 'fresher' : 'Experience' });
-    }
+      setFormValues({ ...formValues, [name]: checked ? 'fresher' : 'Experience' });}
     else if (name === 'emailId') {
       // Email validation
       const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -288,7 +227,6 @@ function SignUp() {
       }
     } else if (name === 'phoneNumber') {
       // Phone number validation
-      console.log("value",value)
       const phonePattern = /^[0-9]{10}$/;
       if (value.length === 10) {
         if (!phonePattern.test(value)) {
@@ -313,7 +251,6 @@ function SignUp() {
         setErrors({ ...errors, [name]: '' });
       }
     }
-  
     // Update form values
     setFormValues({ ...formValues, [name]: value });
   };
@@ -393,8 +330,7 @@ function SignUp() {
             toast.success("User Signup successfully and verified in Email");
             window.location.href = '/login';
           }, 2000);
-        } else {
-          
+        } else {   
         }
       } catch (error) {
         console.error('Error:', error);
@@ -437,9 +373,7 @@ function SignUp() {
   const handleDateChange = (e, index, dateType) => {
     const newLastCompany = [...lastCompany];
     const newDateValue = e.target.value;
-
     if (dateType === 'lastJoiningDate') {
-      // Validate Join Date vs Relieving Date
       if (newLastCompany[index].lastRelievingDate && new Date(newDateValue) > new Date(newLastCompany[index].lastRelievingDate)) {
         alert('Joining Date cannot be after Relieving Date');
         return;
@@ -453,7 +387,6 @@ function SignUp() {
       }
       newLastCompany[index].lastRelievingDate = newDateValue;
     }
-
     setLastCompany(newLastCompany);
   };
   const handleSectorEvent = (event) => {
@@ -463,13 +396,11 @@ function SignUp() {
       id: ind.id,
       value: ind.name,
     }));
-
     setFormValues(prevValues => ({
       ...prevValues,
       sector: selectedData, // This now contains an array of objects with both id and name
     }));
   };
-  
   const handleRemoveCurrentCompany = (id) => {
     setCurrentCompany(currentCompany.filter(company => company.id !== id));
   };
@@ -479,7 +410,6 @@ function SignUp() {
       { id: lastCompany.length + 1, lastCompanyName: '', lastRole: '', lastDesignation: '', lastJoiningDate: '', lastRelievingDate: '',candidateId:'string' },
     ]);
   };
-
   const handleRemoveLastCompany = (id) => {
     setLastCompany(lastCompany.filter(company => company.id !== id));
   };
@@ -489,46 +419,21 @@ function SignUp() {
       ...item,  
       currentlyWorking: isWorking  
     }));
+    console.log("current company",currentCompany)
     const lasCompany=lastCompany?.map(item =>({
       ...item,
       currentlyWorking: isWorking,
     }))
-  
+    console.log("lasCom",lasCompany)
     const removeIdField = (array) => array?.map(({ id, ...rest }) => rest);
-    const finalData={
-      firstName:formValues.firstName,
-      lastName:formValues.lastName,
-      emailId:formValues.emailId,
-      mobileNumber:formValues.phoneNumber,
-      code:"string",
-      password:'string' ,
-      experienceFresher:isFresher?isFresher:false,
-      totalExperience:formValues.totalExperience?formValues.totalExperience:"string",
-      degree:'string',
-      resume:'string',
-      country:getcountryName,
-      countryId:countryId,
-      state:getstateName,
-      stateId:stateId,
-      city: area.cityId,
-      cityId:getcityName,
-      gender: formValues.gender,
-      candidateType:"string",
-      profession:formValues.profession,
-      industryId:formValues.sector?.map((item)=>item?.id),
-      industryName:formValues.sector?.map((item)=>item?.value),
-      role: "string",
-      designation: "string",
-      candidateExperiencesList:isWorking ? removeIdField(curCompany) : removeIdField(lasCompany),
-      candidateQualificationList: removeIdField(qualifications)
+    const finalData={firstName:formValues.firstName,lastName:formValues.lastName,emailId:formValues.emailId,mobileNumber:formValues.phoneNumber,code:"string",password:'string' ,
+      experienceFresher:isFresher?isFresher:false,totalExperience:formValues.totalExperience?formValues.totalExperience:"string",degree:'string',resume:'string',country:getcountryName,
+      countryId:countryId,state:getstateName,stateId:stateId,city: area.cityId,cityId:getcityName,gender: formValues.gender,candidateType:"string",
+      profession:formValues.profession,industryId:formValues.sector?.map((item)=>item?.id),industryName:formValues.sector?.map((item)=>item?.value),role: "string",designation: "string",candidateExperiencesList:isWorking ? removeIdField(curCompany) : removeIdField(lasCompany),candidateQualificationList: removeIdField(qualifications)
     }
-    console.log("final data",finalData)
-   
     let Fullurl=constants.CANDIDATE+'candidate/save'
     var json=JSON.stringify(finalData)
-        const blob = new Blob([json], {
-        type:"application/json"
-      })
+        const blob = new Blob([json], {type:"application/json"})
        var bodyFormData = new FormData();
        bodyFormData.append("candidate", blob);
        for (let i = 0; i < uploadedFiles?.length; i++) {
@@ -540,15 +445,10 @@ function SignUp() {
           headers: {
             // 'Content-Type': 'multipart/form-data',
             // 'accept': 'application/json',
-            // 'Content-Type': 'application/json',
-            // "Access-Control-Allow-Headers" : "Content-Type",
-            // "Access-Control-Allow-Origin": "*",
-            // "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
           },
           body: bodyFormData,
           type: 'multipart/form-data'
         });
-      
         if (res.ok) { // Simplified the status check
           let response = await res.json();
           setUserCode(response.id);
@@ -565,12 +465,53 @@ function SignUp() {
         console.error("Error:", error);
         toast.error("An unexpected error occurred. Please try again later.");
       }
-      
-    // dispatch(signUpUser({
-    //   communicationaddress,
-    //   formValues,
-    //   area
-    // }));
+  }
+  const updateCandidate=async()=>{
+    const curCompany = currentCompany?.map(item => ({
+      ...item,  currentlyWorking: isWorking }));
+    const lasCompany=lastCompany?.map(item =>({
+      ...item,currentlyWorking: isWorking,}))
+    const removeIdField = (array) => array?.map(({ id, ...rest }) => rest);
+
+    const finalData={
+      id:userCode,firstName:formValues.firstName,lastName:formValues.lastName,emailId:formValues.emailId,mobileNumber:formValues.phoneNumber,code:"string",password:'string' ,
+      experienceFresher:isFresher?isFresher:false,totalExperience:formValues.totalExperience?formValues.totalExperience:"string",degree:'string',resume:'string',
+      country:getcountryName,countryId:countryId,state:getstateName,stateId:stateId,city: area.cityId,cityId:getcityName,gender: formValues.gender,candidateType:"string",
+      profession:formValues.profession,industryId:formValues.sector?.map((item)=>item?.id),industryName:formValues.sector?.map((item)=>item?.value),role: "string",designation: "string",
+      candidateExperiencesList:isWorking ? removeIdField(curCompany) : removeIdField(lasCompany),candidateQualificationList: removeIdField(qualifications)
+    }
+    let Fullurl=constants.CANDIDATE+'candidate/updateCandidate'
+    var json=JSON.stringify(finalData)
+        const blob = new Blob([json], {
+        type:"application/json"
+      })
+       var bodyFormData = new FormData();
+       bodyFormData.append("candidate", blob);
+       for (let i = 0; i < uploadedFiles?.length; i++) {
+        bodyFormData.append("documentList", uploadedFiles[i]);
+      }
+      try {
+        let res = await fetch(Fullurl, {
+          method: 'Put',
+          headers: {
+            // 'Content-Type': 'multipart/form-data',
+            // 'accept': 'application/json',
+          },
+          body: bodyFormData,
+          type: 'multipart/form-data'
+        });
+        if (res.ok) { // Simplified the status check
+          let response = await res.json();
+          toast.error("Candidate Update Successfully");
+        } else if (res.status === 409) { 
+          toast.error("User is already in use, please create a different user");
+        } else {
+          toast.error("An error occurred. Please try again later.");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        toast.error("An unexpected error occurred. Please try again later.");
+      }
   }
   return (
     <div className="wrapper">
@@ -585,43 +526,17 @@ function SignUp() {
               <div className="header-right-area d-flex justify-content-between">
                   <div className="main-menu d-none d-xl-block me-xl-5">
                       <ul>
-                          <li><a href="/">Home </a>
-                              {/* <ul className="sub-menu">
-                                  <li><Link to="/">homepage 1</Link></li>
-                                  <li><Link to="/homeTwo">homepage 2</Link></li>
-                                  <li><Link to="/homeThree">homepage 3</Link></li>
-                                  <li><Link to="/homeFour">homepage 4</Link></li>
-                              </ul> */}
-                          </li>
+                          <li><a href="/">Home </a></li>
                           <li><Link to="/about">about us</Link></li>
                           <li><Link to="/services">Services</Link></li>
-                          {/* <li><a href="#">Pages <i className="fal fa-plus"></i></a>
-                              <ul className="sub-menu">
-                                  <li><Link to="/Team">team</Link></li>
-                                  <li><Link to="/faq">faq</Link></li>
-                                  <li><Link to="/projects">projects</Link></li>
-                                  <li><Link to="/pricing">Pricing</Link></li>
-                              </ul>
-                          </li> */}
                           <li><Link to="/career">Career</Link></li>
                           <li><Link to="/contact">Contact</Link></li>
-                          {/* <li>
-                              <a href="#" onClick={handleSearch} className="search-btn"><i className="fas fa-search"></i></a>
-                              <div className={search ? 'search-box' : 'search-box show'}>
-                                  <form action="#">
-                                      <input type="text" placeholder="Search"/>
-                                      <button type="submit"><i className="fal fa-search"></i></button>
-                                  </form>
-                              </div>
-                          </li> */}
                       </ul>
                   </div>
                   <div className="header-right-elements d-flex align-items-center justify-content-between">
                       <div className="d-inline-block ms-4 d-xl-none">
                           <div className="mobile-nav-wrap">                    
-                              <div id="hamburger" onClick={handleMobileMenu}>
-                                  <i className="fal fa-bars"></i>
-                              </div>
+                              <div id="hamburger" onClick={handleMobileMenu}><i className="fal fa-bars"></i></div>
                               <MobileMenu mobileMenu={mobileMenu} handleMobileMenu={handleMobileMenu} />
                           </div>
                           <div className="overlay"></div>
@@ -644,9 +559,7 @@ function SignUp() {
                             <div className="row ">
                               <div className="col-12 col-lg-3 ">
                                 <label htmlFor="inputFirstName" className="form-label mb-0">First Name</label>
-                                <input 
-                                type="text" 
-                                required
+                                <input type="text"required
                                 value={formValues.firstName}
                                 className={`form-control form-control-sm ${touched.firstName &&errors.firstName ? 'error-input' : ''}`} 
                                 name="firstName" 
@@ -682,13 +595,10 @@ function SignUp() {
                                 <label htmlFor="inputEmailAddress" className="form-label mb-0">Email</label>
                                 <input 
                                   type="email" 
-                                  required
-                                  value={formValues.emailId}
+                                  required value={formValues.emailId}
                                   className={`form-control form-control-sm ${touched.emailId &&errors.emailId ? 'error-input' : ''}`} 
-                                  name="emailId"  
-                                  onChange={handleEvent} 
-                                  onBlur={handleBlur}
-                                  placeholder="john@example.com" 
+                                  name="emailId" onChange={handleEvent} 
+                                  onBlur={handleBlur} placeholder="john@example.com" 
                                 />
                                 {errors.emailId && touched.emailId  &&(
                                   <span className="text-danger" id="emailValidationErrorMsg">
@@ -703,15 +613,9 @@ function SignUp() {
                                     <span className="input-group-text country-code">+91</span>
                                   </div>
                                   <input
-                                    type="number"
-                                    required
-                                   
-                                    className={`form-control form-control-sm ${touched.phoneNumber && errors.phoneNumber ? 'error-input' : ''}`} 
-                                    name="phoneNumber"
-                                    maxLength="10"
-                                    onBlur={handleBlur}
-                                    onKeyUp={handleEvent}
-                                    placeholder="Phone No"
+                                    type="number" required
+                                    className={`form-control form-control-sm ${touched.phoneNumber && errors.phoneNumber ? 'error-input' : ''}`} name="phoneNumber"
+                                    maxLength="10"onBlur={handleBlur} onKeyUp={handleEvent} placeholder="Phone No"
                                   />
                                 </div>
                                 {errors.phoneNumber && touched.phoneNumber && (
@@ -720,7 +624,6 @@ function SignUp() {
                                   </span>
                                 )}
                               </div>
-
                             </div>
                             <div className="row">
                               <div className="col-12 col-lg-3">
@@ -838,8 +741,6 @@ function SignUp() {
                                 )}
                                 </FormControl>
                               </div>
-
-
                               <div className="col-12 col-lg-3">
                                  <label className="form-check-label mb-0" for="flexCheckDefault">
                                     Upload Resume
@@ -1221,12 +1122,7 @@ function SignUp() {
                               disabled={registerBtnEnable}
                               value="Register"
                             />
-                            <input
-                              type="submit"
-                              className="btn btn-primary bg-primary register-btn-style"
-                              disabled={updateBtnEnable}
-                              value="Update"
-                            />
+                            <button className="btn btn-primary bg-primary register-btn-style" onClick={updateCandidate} disabled={updateBtnEnable}>Update</button>
                           </div>
                         </div>
                         <div className="col-12 text-center">
