@@ -22,8 +22,7 @@ function SignUp() {
   const [mobileMenu, setMobileMenu] = useState(true);
   const dispatch = useDispatch();
   const userCandidate = useSelector((state) => state.user.user); 
-  const [updateBtnEnable, setupdateBtnEnable] = useState(true);
-  const [registerBtnEnable, setRegisterBtnEnable] = useState(false);
+  const [lableButton, setLablebutton] = useState("Register");
   const handleOffset = (e) => {
     e.preventDefault();
     setOffset(!offset);
@@ -113,12 +112,18 @@ function SignUp() {
   const [qualifications, setQualifications] = useState([
     { id: 1, qualification: '', institutionName: '', yearOfPassOut: '', percentage: '',candidateId:'string' }
   ]);
-  const [currentCompany,setCurrentCompany] = useState([
-    {id:1, currentCompany:'',currentRole:'',currentDesignation:'',joiningDate:'',noticePeriod:'',candidateId:'string'}
-  ])
+  const [currentCompany, setCurrentCompany] = useState([
+    { id: 1, currentCompany: '', currentRole: '', currentDesignation: '', joiningDate: '', noticePeriod: '', candidateId: 'string' }
+  ]);
   const [lastCompany, setLastCompany] = useState([
     { id: 1, lastCompanyName: '', lastRole: '', lastDesignation: '', lastJoiningDate: '', lastRelievingDate: '',candidateId:'string' },
   ]);
+  const curCompany = Array.isArray(currentCompany)
+  ? currentCompany.map(item => ({
+      ...item,  
+      currentlyWorking: isWorking  
+    }))
+  : [];
   const [industry,setIndustry] = useState([])
   const[countryId,setCountryId] =useState('')
   const[stateId,setStateId] =useState('')
@@ -256,10 +261,11 @@ function SignUp() {
   };
   const handleCurrent = (event) => {
     const { name, value } = event.target;
-    setCurrent((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
+    setCurrentCompany((prevState) => 
+      prevState && prevState.length > 0 
+        ? prevState.map((item) => ({ ...item, [name]: value }))
+        : [{ [name]: value }]  // Initialize with one item if it's empty
+    );
   };
   const handleChange = (id, field, value) => {
     const updatedQualifications = qualifications.map(qualification => 
@@ -274,12 +280,6 @@ function SignUp() {
       setErrors({ ...errors, [name]: 'Please fill the required field' });
     } 
   };
-  // const handleGenderBlur = () => {
-  //   setTouched({ ...touched, gender: true });
-  //   if (!formValues.gender) {
-  //     setErrors({ ...errors, gender: 'Please select your gender' });
-  //   }
-  // };
   const handleAddMoreDegree = () => {
     setQualifications([
       ...qualifications, 
@@ -337,9 +337,8 @@ function SignUp() {
       }
     };
     if (userCode) {
-      verifyCandidate();
-      setRegisterBtnEnable(true)
-      setupdateBtnEnable(false)
+      verifyCandidate();   
+      setLablebutton("Update")
       let fullurl = constants.CANDIDATE + `candidate/findCandidateById/${userCode}`
       console.log("fullurl",fullurl)
       async function fetchData() {
@@ -354,7 +353,6 @@ function SignUp() {
           .then((response) => {
             const finalData = response.data
             dispatch(signUpUser(finalData));
-
           })
          .catch((error) => {
           })
@@ -363,7 +361,6 @@ function SignUp() {
       fetchData()
     }
   }, [userCode]);
-
   const handleAddMoreCurrentCompany = () => {
     setCurrentCompany([
       ...currentCompany,
@@ -414,104 +411,101 @@ function SignUp() {
     setLastCompany(lastCompany.filter(company => company.id !== id));
   };
   const submitSignUpUser=async (e)=>{
+    const buttonValue = e.nativeEvent.submitter.value;
     e.preventDefault()
-    const curCompany = currentCompany?.map(item => ({
-      ...item,  
-      currentlyWorking: isWorking  
-    }));
-    console.log("current company",currentCompany)
-    const lasCompany=lastCompany?.map(item =>({
-      ...item,
-      currentlyWorking: isWorking,
-    }))
-    console.log("lasCom",lasCompany)
-    const removeIdField = (array) => array?.map(({ id, ...rest }) => rest);
-    const finalData={firstName:formValues.firstName,lastName:formValues.lastName,emailId:formValues.emailId,mobileNumber:formValues.phoneNumber,code:"string",password:'string' ,
-      experienceFresher:isFresher?isFresher:false,totalExperience:formValues.totalExperience?formValues.totalExperience:"string",degree:'string',resume:'string',country:getcountryName,
-      countryId:countryId,state:getstateName,stateId:stateId,city: area.cityId,cityId:getcityName,gender: formValues.gender,candidateType:"string",
-      profession:formValues.profession,industryId:formValues.sector?.map((item)=>item?.id),industryName:formValues.sector?.map((item)=>item?.value),role: "string",designation: "string",candidateExperiencesList:isWorking ? removeIdField(curCompany) : removeIdField(lasCompany),candidateQualificationList: removeIdField(qualifications)
-    }
-    let Fullurl=constants.CANDIDATE+'candidate/save'
-    var json=JSON.stringify(finalData)
-        const blob = new Blob([json], {type:"application/json"})
-       var bodyFormData = new FormData();
-       bodyFormData.append("candidate", blob);
-       for (let i = 0; i < uploadedFiles?.length; i++) {
-        bodyFormData.append("documentList", uploadedFiles[i]);
+   
+      const curCompany = currentCompany?.map(item => ({
+        ...item,  
+        currentlyWorking: isWorking  
+      }));
+      console.log("current company",currentCompany)
+      const lasCompany=lastCompany?.map(item =>({
+        ...item,
+        currentlyWorking: isWorking,
+      }))
+      console.log("lasCom",lasCompany)
+      const removeIdField = (array) => array?.map(({ id, ...rest }) => rest);
+      const finalData={firstName:formValues.firstName,lastName:formValues.lastName,emailId:formValues.emailId,mobileNumber:formValues.phoneNumber,code:"string",password:'string' ,
+        experienceFresher:isFresher?isFresher:false,totalExperience:formValues.totalExperience?formValues.totalExperience:"string",degree:'string',resume:'string',country:getcountryName,
+        countryId:countryId,state:getstateName,stateId:stateId,city:getcityName,cityId:cityId,gender: formValues.gender,candidateType:"string",
+        profession:formValues.profession,industryId:formValues.sector?.map((item)=>item?.id),industryName:formValues.sector?.map((item)=>item?.value),role: "string",designation: "string",candidateExperiencesList:isWorking ? removeIdField(curCompany) : removeIdField(lasCompany),candidateQualificationList: removeIdField(qualifications)
       }
-      try {
-        let res = await fetch(Fullurl, {
-          method: 'POST',
-          headers: {
-            // 'Content-Type': 'multipart/form-data',
-            // 'accept': 'application/json',
-          },
-          body: bodyFormData,
-          type: 'multipart/form-data'
-        });
-        if (res.ok) { // Simplified the status check
-          let response = await res.json();
-          setUserCode(response.id);
-          toast.error("Candidate Register Successfully");
-          setTimeout(function () {
-            alert("Do You Modify any field after registration")
-          }, 1000);
-        } else if (res.status === 409) { 
-          toast.error("User is already in use, please create a different user");
-        } else {
-          toast.error("An error occurred. Please try again later.");
+      console.log("final Data",finalData)
+      if(buttonValue === "Register"){
+      let Fullurl=constants.CANDIDATE+'candidate/save'
+      var json=JSON.stringify(finalData)
+          const blob = new Blob([json], {type:"application/json"})
+         var bodyFormData = new FormData();
+         bodyFormData.append("candidate", blob);
+         for (let i = 0; i < uploadedFiles?.length; i++) {
+          bodyFormData.append("documentList", uploadedFiles[i]);
         }
-      } catch (error) {
-        console.error("Error:", error);
-        toast.error("An unexpected error occurred. Please try again later.");
-      }
-  }
-  const updateCandidate=async()=>{
-    const curCompany = currentCompany?.map(item => ({
-      ...item,  currentlyWorking: isWorking }));
-    const lasCompany=lastCompany?.map(item =>({
-      ...item,currentlyWorking: isWorking,}))
-    const removeIdField = (array) => array?.map(({ id, ...rest }) => rest);
-
-    const finalData={
-      id:userCode,firstName:formValues.firstName,lastName:formValues.lastName,emailId:formValues.emailId,mobileNumber:formValues.phoneNumber,code:"string",password:'string' ,
-      experienceFresher:isFresher?isFresher:false,totalExperience:formValues.totalExperience?formValues.totalExperience:"string",degree:'string',resume:'string',
-      country:getcountryName,countryId:countryId,state:getstateName,stateId:stateId,city: area.cityId,cityId:getcityName,gender: formValues.gender,candidateType:"string",
-      profession:formValues.profession,industryId:formValues.sector?.map((item)=>item?.id),industryName:formValues.sector?.map((item)=>item?.value),role: "string",designation: "string",
-      candidateExperiencesList:isWorking ? removeIdField(curCompany) : removeIdField(lasCompany),candidateQualificationList: removeIdField(qualifications)
-    }
-    let Fullurl=constants.CANDIDATE+'candidate/updateCandidate'
-    var json=JSON.stringify(finalData)
-        const blob = new Blob([json], {
-        type:"application/json"
-      })
-       var bodyFormData = new FormData();
-       bodyFormData.append("candidate", blob);
-       for (let i = 0; i < uploadedFiles?.length; i++) {
-        bodyFormData.append("documentList", uploadedFiles[i]);
-      }
-      try {
-        let res = await fetch(Fullurl, {
-          method: 'Put',
-          headers: {
-            // 'Content-Type': 'multipart/form-data',
-            // 'accept': 'application/json',
-          },
-          body: bodyFormData,
-          type: 'multipart/form-data'
-        });
-        if (res.ok) { // Simplified the status check
-          let response = await res.json();
-          toast.error("Candidate Update Successfully");
-        } else if (res.status === 409) { 
-          toast.error("User is already in use, please create a different user");
-        } else {
-          toast.error("An error occurred. Please try again later.");
+        try {
+          let res = await fetch(Fullurl, {
+            method: 'POST',
+            headers: {
+              // 'Content-Type': 'multipart/form-data',
+              // 'accept': 'application/json',
+            },
+            body: bodyFormData,
+            type: 'multipart/form-data'
+          });
+          if (res.ok) { // Simplified the status check
+            let response = await res.json();
+            setUserCode(response.id);
+            toast.error("Candidate Register Successfully");
+            setTimeout(function () {
+              alert("Do You Modify any field after registration")
+            }, 1000);
+          } else if (res.status === 409) { 
+            toast.error("User is already in use, please create a different user");
+          } else {
+            toast.error("An error occurred. Please try again later.");
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          toast.error("An unexpected error occurred. Please try again later.");
         }
-      } catch (error) {
-        console.error("Error:", error);
-        toast.error("An unexpected error occurred. Please try again later.");
+    }else if(buttonValue === "Update"){
+      const finalData={id:userCode,firstName:formValues.firstName,lastName:formValues.lastName,emailId:formValues.emailId,mobileNumber:formValues.phoneNumber,code:"string",password:'string' ,
+        experienceFresher:isFresher?isFresher:false,totalExperience:formValues.totalExperience?formValues.totalExperience:"string",degree:'string',resume:'string',country:getcountryName,
+        countryId:countryId,state:getstateName,stateId:stateId,city:getcityName,cityId:cityId,gender: formValues.gender,candidateType:"string",
+        profession:formValues.profession,industryId:formValues.sector?.map((item)=>item?.id),industryName:formValues.sector?.map((item)=>item?.value),role: "string",designation: "string",candidateExperiencesList:isWorking ? removeIdField(curCompany) : removeIdField(lasCompany),candidateQualificationList: removeIdField(qualifications)
       }
+      console.log("final update data",finalData)
+      let Fullurl=constants.CANDIDATE+'candidate/updateCandidate'
+      var json=JSON.stringify(finalData)
+          const blob = new Blob([json], {
+          type:"application/json"
+        })
+         var bodyFormData = new FormData();
+         bodyFormData.append("candidate", blob);
+         for (let i = 0; i < uploadedFiles?.length; i++) {
+          bodyFormData.append("documentList", uploadedFiles[i]);
+        }
+        try {
+          let res = await fetch(Fullurl, {
+            method: 'Put',
+            headers: {
+              // 'Content-Type': 'multipart/form-data',
+              // 'accept': 'application/json',
+            },
+            body: bodyFormData,
+            type: 'multipart/form-data'
+          });
+          if (res.ok) { // Simplified the status check
+            let response = await res.json();
+            toast.error("Candidate Update Successfully");
+          } else if (res.status === 409) { 
+            toast.error("User is already in use, please create a different user");
+          } else {
+            toast.error("An error occurred. Please try again later.");
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          toast.error("An unexpected error occurred. Please try again later.");
+        }
+    }
   }
   return (
     <div className="wrapper">
@@ -1119,10 +1113,9 @@ function SignUp() {
                             <input
                               type="submit"
                               className="btn btn-primary bg-primary register-btn-style"
-                              disabled={registerBtnEnable}
-                              value="Register"
+                              disabled={false}
+                              value={lableButton}
                             />
-                            <button className="btn btn-primary bg-primary register-btn-style" onClick={updateCandidate} disabled={updateBtnEnable}>Update</button>
                           </div>
                         </div>
                         <div className="col-12 text-center">
