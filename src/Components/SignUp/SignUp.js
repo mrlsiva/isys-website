@@ -17,6 +17,7 @@ import FooterTwo from '../Footer/FooterTwo';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
+import 'react-toastify/dist/ReactToastify.css';
 function SignUp() {
   const [offset, setOffset] = useState(true)
   const [mobileMenu, setMobileMenu] = useState(true);
@@ -453,7 +454,7 @@ function SignUp() {
           if (res.ok) { // Simplified the status check
             let response = await res.json();
             setUserCode(response.id);
-            toast.error("Candidate Register Successfully");
+            toast.error("Candidate Updated Successfully");
             setTimeout(function () {
               alert("Do You Modify any field after registration")
             }, 1000);
