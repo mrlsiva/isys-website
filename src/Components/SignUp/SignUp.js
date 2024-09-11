@@ -1,90 +1,101 @@
 import React, { useState,useEffect } from 'react';
-import Logo from '../../assets/img/home3/logo.png';
 import constants from '../../constants/Constants'
 import 'boxicons/css/boxicons.min.css';
 import './signup.css'
 import { Link } from 'react-router-dom';
 import axios from 'axios'
-import { useDispatch } from 'react-redux';
+import { useSelector,useDispatch } from 'react-redux';
 import { signUpUser } from '../../redux/store/Slice';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
-import jsonObject from './MockJsonCandidate';
+import jsonObject from './MockJsonCandidate.js';
 import mainLogo from '../../assets/img/home3/logo.png';
 import MobileMenu from "../Header/MobileMenu";
 import FooterTwo from '../Footer/FooterTwo';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
+import 'react-toastify/dist/ReactToastify.css';
 function SignUp() {
-  const [search, setSearch] = useState(true);
   const [offset, setOffset] = useState(true)
   const [mobileMenu, setMobileMenu] = useState(true);
-  
+  const dispatch = useDispatch();
+  const userCandidate = useSelector((state) => state.user.user); 
+  const [lableButton, setLablebutton] = useState("Register");
   const handleOffset = (e) => {
     e.preventDefault();
     setOffset(!offset);
   }
-
   const handleMobileMenu = () => {
     setMobileMenu(!mobileMenu);
   }
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const { itProfessions,allIndustryProfessions,consultingAndITCompanies,itIndustryRoles,industryDesignations,itQualifications,indianInstitutes} =jsonObject;
-  const initialAddressValues = {
-    city: '',
-    state: '',
-    country: '',
-  }
-  const [formValues, setFormValues] = useState({
-    firstName: '',
-    lastName: '',
-    emailId:'',
-    phoneNumber:'',
-    gender:'',
-    degree:'',
-    experience:'',
-    profession:'',
-    sector:[],
-    totalexp:'',
-    position:'',
-    totalExperience:'',
-
-  });
-  const [area,setArea]=useState({
-    countryId:'',
-    stateId:'',
-    cityId:''
-  })
-  const [errors, setErrors] = useState({
-    firstName: '',
-    lastName: '',
-    emailId:'',
-    phoneNumber:'',
-    gender:'',
-    profession:'',
-    sector:''
-   
-  });
-  const [touched, setTouched] = useState({
-    firstName: false,
-    lastName: false,
-    emailId: false,
-    phoneNumber: false,
-    gender:false,
-    profession:'',
-    sector:''
-  });
-  const [current, setCurrent] = useState({
-    currentCompanyName: '',
-    currentRoleName: '',
-    currentDesignationName: '',
-    joinDate: '',
-    noticePeriod: '',
-  });
+  const initialAddressValues = { cityId: '',stateId: '',countryId: '',}
+  const [formValues, setFormValues] = useState({firstName:'',lastName:'',emailId:'',phoneNumber:'',gender:'',degree:'',experience:'',profession:'',sector:[],
+  totalexp:'',position:'',totalExperience:'',experienceFresher:''});
+  const [area,setArea]=useState({countryId:'',stateId:'',cityId:''})
+  const [errors, setErrors] = useState({firstName: '',lastName: '',emailId:'',phoneNumber:'',gender:'',profession:'',sector:''});
+  const [touched, setTouched] = useState({firstName: false,lastName: false,emailId: false,phoneNumber: false,gender:false,profession:'',sector:''});
+  const [current, setCurrent] = useState({currentCompanyName: '',currentRoleName: '',currentDesignationName: '',joinDate: '',noticePeriod: '',});
+  useEffect(() => {
+    if (userCandidate?.length>0) {
+      const sectorData = userCandidate.industryId.map((id, index) => ({id: id,
+        label: userCandidate.industryName[index],
+        value: userCandidate.industryName[index],
+      }));
+      setFormValues(prevValues => ({
+        ...prevValues,
+        firstName: userCandidate.firstName?userCandidate.firstName:'',
+        lastName:userCandidate.lastName?userCandidate.lastName:'',
+        emailId:userCandidate.emailId?userCandidate.emailId:'',
+        gender:userCandidate.gender?userCandidate.gender:'',
+        phoneNumber:userCandidate.mobileNumber?userCandidate.mobileNumber:'',
+        degree:'',
+        experience:userCandidate.experience?userCandidate.experience:'',
+        profession:userCandidate.profession?userCandidate.profession:'',
+        sector:sectorData?sectorData:'',
+        totalExperience:userCandidate.totalExperience?userCandidate.totalExperience:'',
+        experienceFresher:setIsFresher(formValues.experienceFresher)
+      }));
+      setcommunicationaddress({
+        countryId:userCandidate.countryId,
+        stateId:userCandidate.stateId,
+        cityId: userCandidate.cityId
+      }) 
+      const qualificationsData = userCandidate?.candidateQualificationList.map((qual) => ({
+        id: qual.id?qual.id:'',
+        qualification: qual.qualification?qual.qualification:'',
+        institutionName: qual.institutionName?qual.institutionName:'',
+        yearOfPassOut: qual.yearOfPassOut||'',
+        percentage: qual.percentage?qual.percentage:'',
+        candidateId: qual.candidateId ?qual.candidateId:'',
+    }));
+    setQualifications(qualificationsData);
+    const formattedData = userCandidate?.candidateExperiencesList?.map((experience) => ({
+      id: experience.id?experience.id:'',
+      lastCompanyName: experience.lastCompanyName?experience.lastCompanyName:'',
+      lastRole: experience.lastRole?experience.lastRole:'',
+      lastDesignation: experience.lastDesignation?experience.lastDesignation:'',
+      lastJoiningDate: experience.lastJoiningDate, // format date to YYYY-MM-DD
+      lastRelievingDate: experience.lastRelievingDate, // format date to YYYY-MM-DD
+      candidateId: experience.candidateId?experience.candidateId:'',
+    }));
+    setLastCompany(formattedData);
+    }
+    const formattedCompanyData = userCandidate?.candidateExperiencesList?.map((experience) => ({
+      id: experience.id?experience.id:'',
+      currentCompany: experience.currentCompany?experience.currentCompany:'',
+      currentRole: experience.currentRole?experience.currentRole:'',
+      currentDesignation: experience.currentDesignation?experience.currentDesignation:'',
+      joiningDate: experience.joiningDate, // format date to YYYY-MM-DD
+      noticePeriod: experience.noticePeriod, // format date to YYYY-MM-DD
+      candidateId: experience.candidateId?experience.candidateId:'',
+    }));
+    setCurrentCompany(formattedCompanyData);
+  }, [userCandidate]);
   const [isFresher, setIsFresher] = useState(false);
   const [data, setData] = useState([])
   const [countryOptions, setCountryOptions] = useState([])
@@ -94,7 +105,6 @@ function SignUp() {
   const [stateOptionsForCommunication, setStateOptionsForCommunication] = useState([])
   const [communicationaddress, setcommunicationaddress] = useState(initialAddressValues)
   const [getstateName,setStateName]=useState('')
-  const [visible,setVisible]= useState(false)
   const [userCode,setUserCode] = useState("")
   const [isWorking, setIsWorking] = useState(false);
   const [uploadedFiles,setUploadedFiles] = useState([])
@@ -103,14 +113,22 @@ function SignUp() {
   const [qualifications, setQualifications] = useState([
     { id: 1, qualification: '', institutionName: '', yearOfPassOut: '', percentage: '',candidateId:'string' }
   ]);
-  const [currentCompany,setCurrentCompany] = useState([
-    {id:1, currentCompany:'',currentRole:'',currentDesignation:'',joiningDate:'',noticePeriod:'',candidateId:'string'}
-  ])
+  const [currentCompany, setCurrentCompany] = useState([
+    { id: 1, currentCompany: '', currentRole: '', currentDesignation: '', joiningDate: '', noticePeriod: '', candidateId: 'string' }
+  ]);
   const [lastCompany, setLastCompany] = useState([
     { id: 1, lastCompanyName: '', lastRole: '', lastDesignation: '', lastJoiningDate: '', lastRelievingDate: '',candidateId:'string' },
   ]);
+  const curCompany = Array.isArray(currentCompany)
+  ? currentCompany.map(item => ({
+      ...item,  
+      currentlyWorking: isWorking  
+    }))
+  : [];
   const [industry,setIndustry] = useState([])
-
+  const[countryId,setCountryId] =useState('')
+  const[stateId,setStateId] =useState('')
+  const[cityId,setCityId] =useState('')
   const handleCheckExperience = (e) => {
     setIsFresher(e.target.checked);
   };
@@ -122,24 +140,19 @@ function SignUp() {
     return array.map((item) => ({ label: item[keyLabel], value: item[keyValue] }))
   }
   function handleInputsetcommunicationaddress(e) {
-    console.log(e)
-    const { name, value,label } = e.target
-    const selectedLabel = e.target.options[e.target.selectedIndex].text;
-
-    setArea((prevState) => ({
-      ...prevState,
-      [name]: selectedLabel,
-    }))
+    const { name, value } = e.target
     if(name==='cityId')
     {
       const selectedCityId = e.target.value;
     const selectedCityName = e.target.options[e.target.selectedIndex].text;
+      setCityId(e.target.options[e.target.selectedIndex].value)
       setCityName(selectedCityName)
     }
     switch (name) {
       case 'countryId': {
         const [curCountry] = data.filter((country) => country.countryId === +value)
-        
+        console.log("country id",curCountry)
+        setCountryId(curCountry.countryId)
         setCountryName(curCountry.countryName)
        
         setStateOptionsForCommunication(
@@ -153,49 +166,21 @@ function SignUp() {
           (country) => country.countryId === +communicationaddress.countryId,
         )
         const [curState] = (curCountry?.states ?? []).filter((state) => state.stateId === +value)
+        setStateId(curState.stateId)
         setStateName(curState.stateName)
         setCityOptionsForCommunication(
-          getDropdownOptions(curState?.cities ?? [], 'cityName', 'cityId'),
-          
+          getDropdownOptions(curState?.cities ?? [], 'cityName', 'cityId'), 
         )
-
         break
       }
-    
     }
     setcommunicationaddress({
       ...communicationaddress,
       [name]: value,
     })
   }
-  //collect industry
-  useEffect(() => {
-    let fullurl = constants.CANDIDATE + 'industry/findAll'
-    console.log("fullurl",fullurl)
-    async function fetchData() {
-      axios.get(fullurl, {
-          headers: {
-            //Authorization: AccessToken,
-            'Content-Type': 'application/json',
-            // 'Access-Control-Allow-Origin': '*',
-            // 'Access-Control-Allow-Headers': '*',
-          },
-        })
-        .then((response) => {
-          const finalData = response.data
-          setIndustry(finalData)
-         
-        })
-       .catch((error) => {
-        })
-        console.log("state",data)
-    }
-    fetchData()
-  }, [])
-// country state city
   useEffect(() => {
     let fullurl = constants.EORMURL + 'countries'
-    console.log("fullurl",fullurl)
     async function fetchData() {
       axios.get(fullurl, {
           headers: {
@@ -212,18 +197,32 @@ function SignUp() {
         })
        .catch((error) => {
         })
-        console.log("state",data)
     }
     fetchData()
+    let fullurlIndustry = constants.CANDIDATE + 'industry/findAll'
+    async function fetchDataIndustry() {
+      axios.get(fullurlIndustry, {
+          headers: {
+            //Authorization: AccessToken,
+            'Content-Type': 'application/json',
+            // 'Access-Control-Allow-Origin': '*',
+            // 'Access-Control-Allow-Headers': '*',
+          },
+        })
+        .then((response) => {
+          const finalData = response.data
+          setIndustry(finalData)
+        })
+       .catch((error) => {
+        })
+        console.log("state",data)
+    }
+    fetchDataIndustry()
   }, [])
-
   const handleEvent = (e) => {
     const { name, value, type, checked } = e.target;
-    console.log("name:", name, "value:", value, "type:", type, "checked:", checked);
     if (type === 'checkbox') {
-      // Update form values based on checkbox
-      setFormValues({ ...formValues, [name]: checked ? 'fresher' : 'Experience' });
-    }
+      setFormValues({ ...formValues, [name]: checked ? 'fresher' : 'Experience' });}
     else if (name === 'emailId') {
       // Email validation
       const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -258,16 +257,16 @@ function SignUp() {
         setErrors({ ...errors, [name]: '' });
       }
     }
-  
     // Update form values
     setFormValues({ ...formValues, [name]: value });
   };
   const handleCurrent = (event) => {
     const { name, value } = event.target;
-    setCurrent((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
+    setCurrentCompany((prevState) => 
+      prevState && prevState.length > 0 
+        ? prevState.map((item) => ({ ...item, [name]: value }))
+        : [{ [name]: value }]  // Initialize with one item if it's empty
+    );
   };
   const handleChange = (id, field, value) => {
     const updatedQualifications = qualifications.map(qualification => 
@@ -275,7 +274,6 @@ function SignUp() {
     );
     setQualifications(updatedQualifications);
   };
-
   const handleBlur = (e) => {
     const { name, value } = e.target;
     setTouched({ ...touched, [name]: true });
@@ -283,20 +281,12 @@ function SignUp() {
       setErrors({ ...errors, [name]: 'Please fill the required field' });
     } 
   };
-  const handleGenderBlur = () => {
-    setTouched({ ...touched, gender: true });
-    if (!formValues.gender) {
-      setErrors({ ...errors, gender: 'Please select your gender' });
-    }
-  };
-
   const handleAddMoreDegree = () => {
     setQualifications([
       ...qualifications, 
       { id: qualifications.length + 1, qualification: '', institutionName: '', yearOfPassOut: '', percentage: '',candidateId:'string'  }
     ]);
   };
-
   const handleRemoveDegree = (id) => {
     setQualifications(qualifications.filter(qualification => qualification.id !== id));
   };
@@ -320,10 +310,9 @@ function SignUp() {
   const handleFileChange = (e)=>{
     const chosenFiles = Array.from(e.target.files);
     handleUploadedFiles(chosenFiles);
-}
+  }
   useEffect(() => {
     const verifyCandidate = async () => {
-      console.log("userCode", userCode);
       let Fullurl = `${constants.CANDIDATE}verifyCandidate/{candidate}?candidateId=${userCode}&isVerify=true`;
       try {
         let res = await fetch(Fullurl, {
@@ -342,16 +331,35 @@ function SignUp() {
             toast.success("User Signup successfully and verified in Email");
             window.location.href = '/login';
           }, 2000);
-        } else {
-          
+        } else {   
         }
       } catch (error) {
         console.error('Error:', error);
       }
     };
-
     if (userCode) {
-      verifyCandidate();
+      verifyCandidate();   
+      setLablebutton("Update")
+      let fullurl = constants.CANDIDATE + `candidate/findCandidateById/${userCode}`
+      console.log("fullurl",fullurl)
+      async function fetchData() {
+        axios.get(fullurl, {
+            headers: {
+              //Authorization: AccessToken,
+              'Content-Type': 'application/json',
+              // 'Access-Control-Allow-Origin': '*',
+              // 'Access-Control-Allow-Headers': '*',
+            },
+          })
+          .then((response) => {
+            const finalData = response.data
+            dispatch(signUpUser(finalData));
+          })
+         .catch((error) => {
+          })
+          console.log("state",data)
+      }
+      fetchData()
     }
   }, [userCode]);
   const handleAddMoreCurrentCompany = () => {
@@ -363,9 +371,7 @@ function SignUp() {
   const handleDateChange = (e, index, dateType) => {
     const newLastCompany = [...lastCompany];
     const newDateValue = e.target.value;
-
     if (dateType === 'lastJoiningDate') {
-      // Validate Join Date vs Relieving Date
       if (newLastCompany[index].lastRelievingDate && new Date(newDateValue) > new Date(newLastCompany[index].lastRelievingDate)) {
         alert('Joining Date cannot be after Relieving Date');
         return;
@@ -379,7 +385,6 @@ function SignUp() {
       }
       newLastCompany[index].lastRelievingDate = newDateValue;
     }
-
     setLastCompany(newLastCompany);
   };
   const handleSectorEvent = (event) => {
@@ -389,13 +394,11 @@ function SignUp() {
       id: ind.id,
       value: ind.name,
     }));
-
     setFormValues(prevValues => ({
       ...prevValues,
       sector: selectedData, // This now contains an array of objects with both id and name
     }));
   };
-  
   const handleRemoveCurrentCompany = (id) => {
     setCurrentCompany(currentCompany.filter(company => company.id !== id));
   };
@@ -405,101 +408,106 @@ function SignUp() {
       { id: lastCompany.length + 1, lastCompanyName: '', lastRole: '', lastDesignation: '', lastJoiningDate: '', lastRelievingDate: '',candidateId:'string' },
     ]);
   };
-
   const handleRemoveLastCompany = (id) => {
     setLastCompany(lastCompany.filter(company => company.id !== id));
   };
   const submitSignUpUser=async (e)=>{
+    const buttonValue = e.nativeEvent.submitter.value;
     e.preventDefault()
-    console.log("communication ",communicationaddress)
-    console.log("formValues",formValues)
-    console.log("area",area)
-    console.log("phonenumber",formValues)
-    const curCompany = currentCompany.map(item => ({
-      ...item,  
-      currentlyWorking: isWorking  
-    }));
-    const lasCompany=lastCompany.map(item =>({
-      ...item,
-      currentlyWorking: isWorking,
-    }))
-  
-    const removeIdField = (array) => array?.map(({ id, ...rest }) => rest);
-    const finalData={
-      firstName:formValues.firstName,
-      lastName:formValues.lastName,
-      emailId:formValues.emailId,
-      mobileNumber:"7639651113",
-      code:"string",
-      password:'string' ,
-      experienceFresher:isFresher?isFresher:false,
-      totalExperience:formValues.totalexp?formValues.totalexp:"string",
-      degree:'string',
-      resume:'string',
-      country:area.countryId,
-      state:area.stateId,
-      city: area.cityId,
-      gender: formValues.gender,
-      candidateType:"string",
-      profession:formValues.profession,
-      industryId:formValues.sector?.map((item)=>item?.id),
-      industryName:formValues.sector?.map((item)=>item?.value),
-      role: "string",
-      designation: "string",
-      candidateExperiencesList:isWorking ? removeIdField(curCompany) : removeIdField(lasCompany),
-      candidateQualificationList: removeIdField(qualifications)
-    }
-    console.log("final data",finalData)
    
-    let Fullurl=constants.CANDIDATE+'candidate/save'
-    var json=JSON.stringify(finalData)
-        const blob = new Blob([json], {
-        type:"application/json"
-      })
-       var bodyFormData = new FormData();
-       bodyFormData.append("candidate", blob);
-       for (let i = 0; i < uploadedFiles?.length; i++) {
-        bodyFormData.append("documentList", uploadedFiles[i]);
+      const curCompany = currentCompany?.map(item => ({
+        ...item,  
+        currentlyWorking: isWorking  
+      }));
+      console.log("current company",currentCompany)
+      const lasCompany=lastCompany?.map(item =>({
+        ...item,
+        currentlyWorking: isWorking,
+      }))
+      console.log("lasCom",lasCompany)
+      const removeIdField = (array) => array?.map(({ id, ...rest }) => rest);
+      const finalData={firstName:formValues.firstName,lastName:formValues.lastName,emailId:formValues.emailId,mobileNumber:formValues.phoneNumber,code:"string",password:'string' ,
+        experienceFresher:isFresher?isFresher:false,totalExperience:formValues.totalExperience?formValues.totalExperience:"string",degree:'string',resume:'string',country:getcountryName,
+        countryId:countryId,state:getstateName,stateId:stateId,city:getcityName,cityId:cityId,gender: formValues.gender,candidateType:"string",
+        profession:formValues.profession,industryId:formValues.sector?.map((item)=>item?.id),industryName:formValues.sector?.map((item)=>item?.value),role: "string",designation: "string",candidateExperiencesList:isWorking ? removeIdField(curCompany) : removeIdField(lasCompany),candidateQualificationList: removeIdField(qualifications)
       }
-      try {
-        let res = await fetch(Fullurl, {
-          method: 'POST',
-          headers: {
-            // 'Content-Type': 'multipart/form-data',
-            // 'accept': 'application/json',
-            // 'Content-Type': 'application/json',
-            // "Access-Control-Allow-Headers" : "Content-Type",
-            // "Access-Control-Allow-Origin": "*",
-            // "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
-          },
-          body: bodyFormData,
-          type: 'multipart/form-data'
-        });
-      
-        if (res.ok) { // Simplified the status check
-          let response = await res.json();
-          setUserCode(response.id);
-          console.log("Response received:", response.id);
-          setTimeout(function () {
-        
-          }, 2000);
-        } else if (res.status === 409) { 
-          toast.error("User is already in use, please create a different user");
-        } else {
-          toast.error("An error occurred. Please try again later.");
+      console.log("final Data",finalData)
+      if(buttonValue === "Register"){
+      let Fullurl=constants.CANDIDATE+'candidate/save'
+      var json=JSON.stringify(finalData)
+          const blob = new Blob([json], {type:"application/json"})
+         var bodyFormData = new FormData();
+         bodyFormData.append("candidate", blob);
+         for (let i = 0; i < uploadedFiles?.length; i++) {
+          bodyFormData.append("documentList", uploadedFiles[i]);
         }
-      } catch (error) {
-        console.error("Error:", error);
-        toast.error("An unexpected error occurred. Please try again later.");
+        try {
+          let res = await fetch(Fullurl, {
+            method: 'POST',
+            headers: {
+              // 'Content-Type': 'multipart/form-data',
+              // 'accept': 'application/json',
+            },
+            body: bodyFormData,
+            type: 'multipart/form-data'
+          });
+          if (res.ok) { // Simplified the status check
+            let response = await res.json();
+            setUserCode(response.id);
+            toast.error("Candidate Updated Successfully");
+            setTimeout(function () {
+              alert("Do You Modify any field after registration")
+            }, 1000);
+          } else if (res.status === 409) { 
+            toast.error("User is already in use, please create a different user");
+          } else {
+            toast.error("An error occurred. Please try again later.");
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          toast.error("An unexpected error occurred. Please try again later.");
+        }
+    }else if(buttonValue === "Update"){
+      const finalData={id:userCode,firstName:formValues.firstName,lastName:formValues.lastName,emailId:formValues.emailId,mobileNumber:formValues.phoneNumber,code:"string",password:'string' ,
+        experienceFresher:isFresher?isFresher:false,totalExperience:formValues.totalExperience?formValues.totalExperience:"string",degree:'string',resume:'string',country:getcountryName,
+        countryId:countryId,state:getstateName,stateId:stateId,city:getcityName,cityId:cityId,gender: formValues.gender,candidateType:"string",
+        profession:formValues.profession,industryId:formValues.sector?.map((item)=>item?.id),industryName:formValues.sector?.map((item)=>item?.value),role: "string",designation: "string",candidateExperiencesList:isWorking ? removeIdField(curCompany) : removeIdField(lasCompany),candidateQualificationList: removeIdField(qualifications)
       }
-      
-    // dispatch(signUpUser({
-    //   communicationaddress,
-    //   formValues,
-    //   area
-    // }));
+      console.log("final update data",finalData)
+      let Fullurl=constants.CANDIDATE+'candidate/updateCandidate'
+      var json=JSON.stringify(finalData)
+          const blob = new Blob([json], {
+          type:"application/json"
+        })
+         var bodyFormData = new FormData();
+         bodyFormData.append("candidate", blob);
+         for (let i = 0; i < uploadedFiles?.length; i++) {
+          bodyFormData.append("documentList", uploadedFiles[i]);
+        }
+        try {
+          let res = await fetch(Fullurl, {
+            method: 'Put',
+            headers: {
+              // 'Content-Type': 'multipart/form-data',
+              // 'accept': 'application/json',
+            },
+            body: bodyFormData,
+            type: 'multipart/form-data'
+          });
+          if (res.ok) { // Simplified the status check
+            let response = await res.json();
+            toast.error("Candidate Update Successfully");
+          } else if (res.status === 409) { 
+            toast.error("User is already in use, please create a different user");
+          } else {
+            toast.error("An error occurred. Please try again later.");
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          toast.error("An unexpected error occurred. Please try again later.");
+        }
+    }
   }
-
   return (
     <div className="wrapper">
       <div className="section-authentication-signin d-flex align-items-center justify-content-center my- my-lg-0">
@@ -513,43 +521,17 @@ function SignUp() {
               <div className="header-right-area d-flex justify-content-between">
                   <div className="main-menu d-none d-xl-block me-xl-5">
                       <ul>
-                          <li><a href="/">Home </a>
-                              {/* <ul className="sub-menu">
-                                  <li><Link to="/">homepage 1</Link></li>
-                                  <li><Link to="/homeTwo">homepage 2</Link></li>
-                                  <li><Link to="/homeThree">homepage 3</Link></li>
-                                  <li><Link to="/homeFour">homepage 4</Link></li>
-                              </ul> */}
-                          </li>
+                          <li><a href="/">Home </a></li>
                           <li><Link to="/about">about us</Link></li>
                           <li><Link to="/services">Services</Link></li>
-                          {/* <li><a href="#">Pages <i className="fal fa-plus"></i></a>
-                              <ul className="sub-menu">
-                                  <li><Link to="/Team">team</Link></li>
-                                  <li><Link to="/faq">faq</Link></li>
-                                  <li><Link to="/projects">projects</Link></li>
-                                  <li><Link to="/pricing">Pricing</Link></li>
-                              </ul>
-                          </li> */}
                           <li><Link to="/career">Career</Link></li>
                           <li><Link to="/contact">Contact</Link></li>
-                          {/* <li>
-                              <a href="#" onClick={handleSearch} className="search-btn"><i className="fas fa-search"></i></a>
-                              <div className={search ? 'search-box' : 'search-box show'}>
-                                  <form action="#">
-                                      <input type="text" placeholder="Search"/>
-                                      <button type="submit"><i className="fal fa-search"></i></button>
-                                  </form>
-                              </div>
-                          </li> */}
                       </ul>
                   </div>
                   <div className="header-right-elements d-flex align-items-center justify-content-between">
                       <div className="d-inline-block ms-4 d-xl-none">
                           <div className="mobile-nav-wrap">                    
-                              <div id="hamburger" onClick={handleMobileMenu}>
-                                  <i className="fal fa-bars"></i>
-                              </div>
+                              <div id="hamburger" onClick={handleMobileMenu}><i className="fal fa-bars"></i></div>
                               <MobileMenu mobileMenu={mobileMenu} handleMobileMenu={handleMobileMenu} />
                           </div>
                           <div className="overlay"></div>
@@ -565,16 +547,15 @@ function SignUp() {
                     <div className="text-center mb-4">
                       <h5 className="headerStyle">Candidate Registration</h5>
                     </div>
-                    <div className="form-body">
+                      <div className="form-body">
                       <form className="row g-3" onSubmit={submitSignUpUser}>
                         <div className="col-12 d-flex gap-2">
                           <div className="container-fluid">
                             <div className="row ">
                               <div className="col-12 col-lg-3 ">
                                 <label htmlFor="inputFirstName" className="form-label mb-0">First Name</label>
-                                <input 
-                                type="text" 
-                                required
+                                <input type="text"required
+                                value={formValues.firstName}
                                 className={`form-control form-control-sm ${touched.firstName &&errors.firstName ? 'error-input' : ''}`} 
                                 name="firstName" 
                                 onBlur={handleBlur} 
@@ -592,6 +573,7 @@ function SignUp() {
                                 <input 
                                   type="text" 
                                   required
+                                  value={formValues.lastName}
                                   className={`form-control form-control-sm ${touched.lastName &&errors.lastName ? 'error-input' : ''}`} 
                                   name="lastName"  
                                   onChange={handleEvent} 
@@ -608,12 +590,10 @@ function SignUp() {
                                 <label htmlFor="inputEmailAddress" className="form-label mb-0">Email</label>
                                 <input 
                                   type="email" 
-                                  required
+                                  required value={formValues.emailId}
                                   className={`form-control form-control-sm ${touched.emailId &&errors.emailId ? 'error-input' : ''}`} 
-                                  name="emailId"  
-                                  onChange={handleEvent} 
-                                  onBlur={handleBlur}
-                                  placeholder="john@example.com" 
+                                  name="emailId" onChange={handleEvent} 
+                                  onBlur={handleBlur} placeholder="john@example.com" 
                                 />
                                 {errors.emailId && touched.emailId  &&(
                                   <span className="text-danger" id="emailValidationErrorMsg">
@@ -628,16 +608,11 @@ function SignUp() {
                                     <span className="input-group-text country-code">+91</span>
                                   </div>
                                   <input
-                                    type="number"
-                                    required
-                                    className={`form-control form-control-sm ${touched.phoneNumber && errors.phoneNumber ? 'error-input' : ''}`} 
-                                    name="phoneNumber"
-                                    minLength="10"
-                                    onBlur={handleBlur}
-                                    onKeyUp={handleEvent}
-                                    placeholder="Phone No"
+                                    type="number" required
+                                    className={`form-control form-control-sm ${touched.phoneNumber && errors.phoneNumber ? 'error-input' : ''}`} name="phoneNumber"
+                                    maxLength="10"onBlur={handleBlur} onKeyUp={handleEvent} placeholder="Phone No"
                                   />
-                                  </div>
+                                </div>
                                 {errors.phoneNumber && touched.phoneNumber && (
                                   <span className="text-danger" id="phoneNumberValidationError">
                                     {errors.phoneNumber}
@@ -674,7 +649,7 @@ function SignUp() {
                                   <option value="">Select Country</option>
                                     {countryOptions.map((country) => (
                                       <option key={country.value} value={country.value}>
-                                        {country.label}
+                                        {country.label?country.label:communicationaddress.countryId}
                                       </option>
                                     ))}
                                   </select>
@@ -716,6 +691,7 @@ function SignUp() {
                                 <select
                                   className={`form-select form-select-sm ${errors.profession ? 'is-invalid' : ''}`}
                                   name="profession"
+                                  value={formValues.profession}
                                   onChange={handleEvent}
                                   onBlur={handleBlur}
                                   required
@@ -741,7 +717,7 @@ function SignUp() {
                                 </label>
                                 <Select
                                   multiple
-                                  value={formValues.sector.map(sector => sector.value)}
+                                  value={formValues.sector?.map((sector) => sector.value)}
                                   onChange={(event) => handleSectorEvent(event)}
                                   renderValue={(selected) => selected.join(', ')}
                                   className={`${errors.sector ? 'is-invalid' : ''}`}
@@ -760,8 +736,6 @@ function SignUp() {
                                 )}
                                 </FormControl>
                               </div>
-
-
                               <div className="col-12 col-lg-3">
                                  <label className="form-check-label mb-0" for="flexCheckDefault">
                                     Upload Resume
@@ -789,7 +763,7 @@ function SignUp() {
                                       className="form-check-input form-check-input-sm me-3"
                                       type="checkbox"
                                       onChange={handleCheckExperience}
-                                      checked={isFresher}
+                                      checked={ isFresher} 
                                       name="experience"
                                       id="flexCheckDefault"
                                     />                       
@@ -907,6 +881,7 @@ function SignUp() {
                                           <input 
                                             type="text" 
                                             required
+                                            value={formValues.totalExperience}
                                             className="form-control form-control-sm" 
                                             onChange={handleEvent}
                                             name="totalExperience" 
@@ -1132,8 +1107,6 @@ function SignUp() {
                                 </div>
                               </div>
                             </div>
-                           
-                  
                           </div>
                         </div>
                         <div className="col-12">
@@ -1141,8 +1114,8 @@ function SignUp() {
                             <input
                               type="submit"
                               className="btn btn-primary bg-primary register-btn-style"
-                              disabled={visible}
-                              value="Register"
+                              disabled={false}
+                              value={lableButton}
                             />
                           </div>
                         </div>
@@ -1155,14 +1128,12 @@ function SignUp() {
                   </div>
                 </div>
               </div>
-        
-        </div>
-        <div className="container-fluid">
+           </div>
+          <div className="container-fluid">
         <FooterTwo/>
         </div>
       </div>
     </div>
   )
 }
-
 export default SignUp
