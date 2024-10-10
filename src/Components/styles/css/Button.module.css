@@ -1,0 +1,153 @@
+@import "./Variables.module.css";
+.PunchInBtn {
+  box-shadow: 1px 4px 11px 0px #2E319273;
+  min-width: 175px;
+  height: 50px;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+  letter-spacing: 0px;
+  color: #FFFFFF;
+  background: #2E3192 !important;
+  outline: none !important;
+  border: 0 !important;
+  cursor: pointer ;
+}
+.btnAlignRight {
+  text-align: right;
+}
+.PunchInBtn:hover {
+  border: 1px solid #2E3192 !important;
+  background-color: transparent !important;
+  color: #2E3192 !important;
+}
+.iconbtnPlus{
+  font-size: 32px;
+  color: rgb(30, 94, 30);
+}
+.iconbtnRemove{
+  margin-left: 5px;
+  font-size: 32px;
+ color:red;
+}
+.btnAddColor {
+  background-color: rgb(30, 94, 30) !important; /* Changed to green */
+  color: var(--white) !important;
+  border: 1px solid rgb(30, 94, 30) !important;
+  cursor: pointer;
+  /* height: 30px;
+  width: 100px;  */
+  text-align: center; /* Center the content horizontally */
+  font-size: 8px; /* Adjust the font size as needed */
+  line-height: 30px; /* Vertically center the text */
+  overflow: visible;
+}
+
+.btnAddColor:hover {
+  background-color: var(--white) !important;
+  color: var(--green) !important;
+  border: 1px solid var(--green) !important;
+}
+
+/* .btnAddColorDisabled {
+  color: var(--white) !important;
+  background-color: var(--green) !important;
+  border: none;
+  cursor: not-allowed;
+  pointer-events: all !important;
+} */
+
+/* .btnAddColorDisabled:hover {
+  color: var(--green) !important;
+  background-color: var(--blue) !important;
+  border: none;
+  cursor: not-allowed;
+  pointer-events: all !important;
+} */
+.btnPadding{
+  margin-right: 10px;
+}
+.btnColor {
+    background-color:var(--blue) !important;
+    color: var(--white) !important;
+    border: 1px solid var(--blue) !important;
+   
+    cursor: pointer;
+  }
+  .btnColor:hover {
+    background-color:var(--white) !important;
+    color:var(--blue) !important;
+    border: 1px solid var(--blue) !important;
+  }
+  .btnColorDisabled {
+    color: var(--white) !important;
+    background-color: var(--green)!important;
+    border: none;
+    cursor: not-allowed;
+    pointer-events: all !important;
+  }
+  .btnColorDisabled:hover {
+    color: var(--green) !important;
+    background-color: var(--blue)!important;
+    border: none;
+    cursor: not-allowed;
+    pointer-events: all !important;
+  }
+
+  /* Choose file style */
+  .customerFileBtn {
+    width: 50%;
+    margin: auto;
+    margin-top: 28px;
+  }
+  
+  input[type="file"] {
+    background-color: transparent;
+  }
+  
+  .customerFileBtn input[type="file"] {
+    padding: 6px 0 0 7px;
+    &::-webkit-file-upload-button {
+      display: none;
+    }
+    &::file-selector-button {
+      display: none;
+    }
+  }
+  
+  .customInputWidth {
+    width: 300px !important; /* Adjust this value as needed */
+  }
+  
+  .customDropdownWidth {
+    width: 100%; /* Adjust this value as needed */
+  }
+  .customerFileBtn label:hover {
+    background-color: #dde0e3;
+    cursor: pointer;
+  }
+  .lableText {
+    font-size: 12px !important;
+    font-family: poppins;
+    font-weight: 500;
+}
+.lableSubText {
+  font-size: 12px !important;
+  color: red !important;
+}
+.lableInputArea {
+  max-height: 48px !important;
+  padding: 8px 8px !important;
+  font-size: 12px !important;
+  font-family: poppins;
+    font-weight: 500 !important;
+}
+.dropdownLabel{
+  font-size: 12px !important;
+  font-family: poppins;
+    font-weight: 500 !important;
+}
+.lableInputArea::placeholder {
+  font-weight: 400 !important;
+ }
