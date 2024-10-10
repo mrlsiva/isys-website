@@ -1,0 +1,25 @@
+.sideBar{
+    background-color: transparent;
+}
+.sideBarNav{
+    background-color: white !important;
+}
+.sideBarNav a{
+    color: #878A99 !important;
+}
+.sideBarNav li a svg{
+    color: #878A99 !important;
+    
+}
+.sideBarNav li.show a{
+    color: #c91e57 !important;  
+}
+.sideBarBoxShadow{
+    box-shadow: 0 2px 4px rgba(15, 34, 58, 0.12) !important;
+}
+/* .showSideBarMenuWidth{
+    width: 250px !important;
+}
+.showSideBarMenu{
+    width: 70px !important;
+} */

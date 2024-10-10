@@ -1,0 +1,457 @@
+@import '../scss/fonts.css';
+
+  .empSubHeader {
+    font-family: var(--body-font-family);
+    font-weight: 400;
+    font-size: 18px;
+    color: #212529;
+  }
+
+  .notificationcss{
+    font-family: var(--body-font-family);
+    font-weight: 400;
+    font-size: 18px;
+    color: #4f4f50;
+ 
+    padding-left: 2px;
+  }
+  .notificationItem{
+    display: flex;
+  }
+  .marqueeContainer {
+    font-family: var(--body-font-family);
+    width: 100%;
+    overflow: hidden;
+    font-size: 20px;
+    font-weight: 400;
+    color: #464646;
+  }
+  .policyHeader{
+    border-top: 5px solid rgb(88, 184, 248);
+  }
+  .policyHeading{
+    font-family: var(--body-font-family);
+    font-weight: 600;
+    font-size: 14px;
+    /* padding: 12px; */
+    color: #495057;
+  }
+  .policyStyle{
+    color: #006DDB;
+    padding: 4px 20px;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .policyStyle:hover {
+    background-color: #EEF4FF; 
+  }
+  .policyBody {
+    padding: 0px 16px;
+  }
+
+/* Notification CSS Start */
+
+.dashboardsubheader{
+  font-family: var(--body-font-family);
+  font-weight: 600;
+  font-size: 16px;
+  color: #495057;
+  text-align: left;
+  width: 100%;
+  border-bottom: 1px dashed #D9D9D9;
+  padding-bottom: 18px;
+  padding-top: 12px;
+}
+.notifiDate{
+  border: none;
+  padding: 10px;
+  background: #F3F6F9;
+  min-height: 76px;
+}
+.empheader {
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 21px;
+    color: #495057;
+  }
+  h5.EventTitle{
+
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 21px;
+    color: #878A99;
+  }
+  .notifiDateAlign {
+    border-bottom: 1px dashed #D9D9D9;
+    padding: 18px 0;
+  }
+  .notifiDateTime {
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 16px;
+    color: #878A99;
+    width: 100%;
+    text-align: left;
+  }
+  .notifiDateTitle {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 22px;
+    color: #212529;
+    width: 100%;
+    text-align: left;
+  }
+/* Notification CSS END */
+
+  /* .equalSpace [class*="col-"]{
+    margin-bottom: -99999px;
+    padding-bottom: 99999px;
+  }  
+  .equalSpace{
+    overflow: hidden; 
+  } */
+  @keyframes scrolling {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+  }
+
+
+p{
+  font-family: var(--body-font-family);
+  margin-bottom: 0 !important;
+}
+
+.eventHighlight{
+  border: 1px solid rgb(216, 213, 213) !important;
+  padding: 15px 20px 15px 20px;
+  font-size: 20px;
+  color: rgb(95, 209, 95);
+  border-radius: 30px;
+  font-weight: 700;
+  background: repeating-linear-gradient(
+    45deg,
+    #ebecf1,
+    #fcfffa 10px,
+    #ebffd9 10px,
+    #c8f1c4 20px)
+}
+.EventSub{
+  color: gray;
+}
+
+
+.ttl1count2{
+    text-align: left;
+  
+    font-weight: 900;
+    font-size: 24px;
+    color: #ffffff;
+}
+.ttlValue1 {
+    margin: 0;
+    font-weight: 700;
+    text-align: center;
+    font-size: 25px;
+    padding-top: 10px;
+    color: #000000;
+}
+
+.ttl2 {
+  font-family: var(--body-font-family);
+    text-align: left;
+    margin: 0;
+    font-weight: 700;
+    font-size: 18px;
+    color: #727272;
+}
+.ttlValue2 {
+    margin: 0;
+    font-weight: 700;
+    text-align: left;
+    font-size: 25px;
+    padding-top: 10px;
+    color: #000000;
+}
+
+.ttl3 {
+    text-align: center;
+    margin: 0;
+    font-weight: 700;
+    font-size: 18px;
+    color: #727272;
+}
+.ttlValue3 {
+    margin: 0;
+    font-weight: 700;
+    text-align: center;
+    font-size: 25px;
+    padding-top: 10px;
+    color: #000000;
+}
+.ttl4 {
+    text-align: center;
+    margin: 0;
+    font-weight: 700;
+    font-size: 18px;
+    color: #727272;
+}
+.ttlValue4 {
+    margin: 0;
+    font-weight: 700;
+    text-align: center;
+    font-size: 25px;
+    padding-top: 10px;
+    color: #000000;
+}
+.cardTitle{
+    color: #828682;
+    font-size: 19px;
+}
+.bgclr5 {
+    background-color: #ebe4ef;
+    border-radius: 10px;
+    padding: 15px;
+    height: 100%;
+    text-align: center;
+}
+.ttl5 {
+    text-align: center;
+    margin: 0;
+    color: #00000070;
+    font-weight: 700;
+    font-size: 18px;
+}
+.ttlValue5 {
+    margin: 0;
+    font-weight: 700;
+    color: #000000;
+    text-align: center;
+    font-size: 25px;
+    padding-top: 10px;
+}
+.quickSelect {
+    width: 100%;
+    border: 2px solid darkgray;
+    border-radius: 20px;
+    padding: 3px 10px;
+    background-color: lightgray;
+    color: darkslategray;
+}
+.quickDataBG {
+    background-color: white;
+    padding: 15px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+}
+.topWidgetsBG {
+    border-radius: 15px;
+    background-color: white;
+    margin-bottom: 20px;
+    padding: 10px 10px 0px 10px;
+}
+.topWidgetsBG2 {
+    border-radius: 15px;
+    background-color: white;
+    margin-bottom: 20px;
+    padding: 10px 10px 20px 10px;
+}
+.Calendar{
+   background-color: rgb(119, 216, 119) !important;
+   color: white;
+   width: 100%;
+   height: 320px;
+}
+.policystyle{
+    padding: 12px;
+}
+.PolicyLinks{
+
+}
+.approvals {
+    display: flex;
+    align-items: center;
+  }
+  
+  .approvals h5 {
+    margin: 0;
+  }
+  
+  .approvals .switch {
+    margin-left: auto;
+  }
+.leaveApplicationBG {
+    background: white;
+    padding: 15px 10px 15px 10px;
+    margin: 20px 0px;
+    border-radius: 10px;
+}
+.leaveApplicationTtl {
+    padding-bottom: 10px;
+}
+
+.wave {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background-color: rgb(93, 149, 255);
+    transform: translate(-50%, -50%);
+    animation: sonar 1.5s infinite;
+}
+@keyframes sonar {
+    0% {
+        width: 0;
+        height: 0;
+        opacity: 1;
+    }
+    100% {
+        width: 100px;
+        height: 100px;
+        opacity: 0;
+    }
+}
+
+.scrollContainer {
+    overflow: hidden;
+    width: 100%;
+    height: 25vh;
+    justify-content: center;
+  }
+  .scrollText {
+    height: 5vh;
+    text-align: center;
+    animation: my-animation 30s infinite;
+    animation-timing-function: ease-in-out;
+    transform: rotate(90deg);
+    white-space: nowrap;
+    width: 100%;
+  }
+  .scrollContainer:hover * {
+    animation-play-state: paused;
+  }
+  
+  @keyframes my-animation {
+    0% {
+        transform: rotate(360deg) translateY(500px);
+    }
+    100% {
+        transform: rotate(360deg) translateY(-500px);
+    }
+  }
+  .newTxt {
+    background-color: orange;
+    border-radius: 50px;
+    padding: 2px 10px;
+    position: relative;
+    font-size: 10px;
+    font-weight: bold;
+    color: white;
+    margin-left: 10px;
+    top: -2px;
+    letter-spacing: 1px;
+  }
+  .linkTxt {
+    font-size: 20px;
+    color: darkslategray;
+    text-decoration: none;
+  }
+  .notification{
+    border: 1px solid #020202;
+    padding: 10px; 
+  }
+  /* punch in card css start */
+  .punchInCard h5{
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 27px;
+    letter-spacing: 0em;
+    text-align: center;
+    color: #29BADB;
+    margin-bottom: 0;
+  }
+  .punchInCard p{
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 21px;
+    letter-spacing: 0em;
+    text-align: center;
+    color: #495057;
+  }
+  /* punch in card css end */
+
+/* midcard css start */
+
+  .midCardBox {
+    border-radius: 4px;
+  }
+  .midCardBoxTitle {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 21px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #ffffff;
+  }
+  .midCardBoxDayCount{
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 34px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #ffffff;
+    margin-right: 6px;
+}
+.midCardBoxDay{
+  font-size: 14px;
+  font-weight: 500;
+  color: #ffffff;
+  letter-spacing: 0em;
+  text-align: left;
+}
+.midCardIcon{
+  border-radius: 4px;
+  background: #ffffff54;
+  min-width: 40px;
+  min-height: 40px;
+  text-align: center;
+}
+.midCardpercentageText {
+
+font-size: 12px;
+font-weight: 400;
+line-height: 10px;
+letter-spacing: 0em;
+text-align: left;
+}
+.midCardpercentageText.bold {
+  font-weight: 600;
+}
+/* midcard css end */
+.borderRadiusFourPx {
+  border-radius: 4px !important;
+  overflow: hidden !important;
+}
+.midCardGridGap .midCard {
+  padding-right: calc(var(--bs-gutter-x) * .5) !important;
+
+} 
+.midCardGridGap .midCard:last-child {
+  padding-right: 0px !important;
+
+}
+.mbRowGap {
+  margin-bottom: calc(var(--bs-gutter-x) * .5);
+}
+.lastChilPaddingZero:last-child {
+  padding-right: 0 !important;
+}
+  
+  
+  
+
+
+  
