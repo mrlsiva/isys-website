@@ -1,0 +1,11 @@
+@import '../scss/fonts.css';
+.carouselBackgroundImg{
+    height:300px;
+    text-align: center;
+}
+.carouselBackgroundImg img{
+    height:100%; 
+    margin: 0 auto;
+    border-radius: 4px;
+    overflow: hidden;
+}
