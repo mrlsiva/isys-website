@@ -12,7 +12,7 @@ const blogOneData = [
         title: 'CREATE QUALITY VIDEOS IN SECONDS USING WIX',
         btnText: 'Read More',
         btnLink: '/newsDetails',
-        authorName: 'Busico',
+        authorName: 'isys',
         authorImg: authorImg,
         date: '28 MAY 2022'
     },
@@ -34,7 +34,7 @@ const blogOneData = [
         title: 'CONVINCE OTHERS NOT TO USE DARK PATTERNS',
         btnText: 'Read More',
         btnLink: '/newsDetails',
-        authorName: 'Busico',
+        authorName: 'isys',
         authorImg: authorImg,
         date: '20 JAN 2020'
     },

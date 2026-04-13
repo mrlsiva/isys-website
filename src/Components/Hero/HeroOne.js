@@ -16,7 +16,7 @@ const HeroOne = () => {
                         <div className="col-12 ps-md-5 pe-md-5 col-xxl-7 col-lg-8 col-md-8 col-sm-10">
                             <div className="hero-contents pe-lg-3">
                                 <h1 className="fs-lg wow fadeInLeft animated" data-wow-duration="1.3s">we build Your Dream</h1>
-                                <p className="pe-lg-5 wow fadeInLeft animated" data-wow-duration="1.3s" data-wow-delay=".4s">Busico is a construction and architecture environmentally most responsible for any kinds of themes.</p>
+                                <p className="pe-lg-5 wow fadeInLeft animated" data-wow-duration="1.3s" data-wow-delay=".4s">isys is a construction and architecture environmentally most responsible for any kinds of themes.</p>
                                 <a href="contact.html" className="theme-btn me-sm-4 wow fadeInLeft" data-wow-duration="1.2s" data-wow-delay=".8s">contact us</a>
                                 <a href="about.html" className="plus-text-btn wow fadeInLeft" data-wow-duration="1.2s" data-wow-delay=".6s">
                                     <div className="icon">
@@ -37,7 +37,7 @@ const HeroOne = () => {
                         <div className="col-12 ps-md-5 pe-md-5 col-xxl-7 col-lg-8 col-md-8 col-sm-10">
                             <div className="hero-contents pe-lg-3">
                                 <h1 className="fs-lg wow fadeInLeft animated" data-wow-duration="1.3s">we build Your Dream</h1>
-                                <p className="pe-lg-5 wow fadeInLeft animated" data-wow-duration="1.3s" data-wow-delay=".4s">Busico is a construction and architecture environmentally most responsible for any kinds of themes.</p>
+                                <p className="pe-lg-5 wow fadeInLeft animated" data-wow-duration="1.3s" data-wow-delay=".4s">isys is a construction and architecture environmentally most responsible for any kinds of themes.</p>
                                 <a href="contact.html" className="theme-btn me-sm-4 wow fadeInLeft" data-wow-duration="1.2s" data-wow-delay=".8s">contact us</a>
                                 <a href="about.html" className="plus-text-btn wow fadeInLeft" data-wow-duration="1.2s" data-wow-delay=".6s">
                                     <div className="icon">

@@ -35,7 +35,7 @@ const HeroFour = () => {
                             <div className="row">
                                 <div className="col-xl-9 col-md-10 col-12">
                                     <div className="hero-contents">
-                                        <h1 className="animated-text bg-heading text-white animated">Busico Web Agency</h1>
+                                        <h1 className="animated-text bg-heading text-white animated">isys Web Agency</h1>
                                         <Link to='/services' className="theme-btn animated-text animated-btn style-4 mt-30">Explore Services</Link>
                                     </div>
                                 </div>

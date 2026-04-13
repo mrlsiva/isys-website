@@ -12,7 +12,7 @@ const blogFourData = [
         title: 'work hard properly and grow your startup business',
         catName: 'Business',
         btnLink: '/newsDetails',
-        authorName: 'Busico',
+        authorName: 'isys',
         authorImg: authorImg,
         date: '28 May 2022',
         comments: '03 Comments'
@@ -36,7 +36,7 @@ const blogFourData = [
         title: 'Beyond Outpaces Stock Market You Should Know',
         catName: 'Marketing',
         btnLink: '/newsDetails',
-        authorName: 'Busico',
+        authorName: 'isys',
         authorImg: authorImg,
         date: '22 Feb 2022',
         comments: '05 Comments'

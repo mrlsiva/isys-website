@@ -8400,17 +8400,17 @@ i[class^="flaticon-"]:before, i[class*=" flaticon-"]:before {
 }
 
 @font-face {
-    font-family: 'busico';
-    src: url('../fonts/busico.eot');
-    src: url('../fonts/busico.eot?#iefix') format('embedded-opentype'),
-         url('../fonts/busico.woff2') format('woff2'),
-         url('../fonts/busico.woff') format('woff');
+    font-family: 'isys';
+    src: url('../fonts/isys.eot');
+    src: url('../fonts/isys.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/isys.woff2') format('woff2'),
+         url('../fonts/isys.woff') format('woff');
     font-weight: normal;
     font-style: normal;
   }
 
   [class^="icon-"]:before, [class*=" icon-"]:before {
-    font-family: "busico";
+    font-family: "isys";
     font-style: normal;
     font-weight: normal;
     speak: never;

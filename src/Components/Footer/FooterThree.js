@@ -9,7 +9,7 @@ const FooterThree = () => {
             <div className="row align-items-center">
             <div className="col-lg-5 order-3 col-md-6 mt-3 mt-lg-0 order-lg-1 col-12 text-center text-md-start">
                 <div className="copyright-info">
-                    <p>© 2022 Copyright By <Link to='/'>Busico</Link>. All Rights Reserved</p>                            
+                    <p>© 2022 Copyright By <Link to='/'>isys</Link>. All Rights Reserved</p>                            
                 </div>
             </div>
             <div className="col-lg-2 col-md-12 text-center order-1 order-lg-2 col-12">

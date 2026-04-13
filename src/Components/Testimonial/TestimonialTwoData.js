@@ -7,7 +7,7 @@ const TestimonialTwoData = [
         img: img1,
         name: 'CEO, Snyder Digital',
         designation: 'Contructor',
-        speech: 'Busicon has been around for more than adecade. It’s a trusted social media tool for businesses of all shapes and sizes.',
+        speech: 'isysn has been around for more than adecade. It’s a trusted social media tool for businesses of all shapes and sizes.',
     },
 
     {
@@ -15,7 +15,7 @@ const TestimonialTwoData = [
         img: img1,
         name: 'Rubel Ahned',
         designation: 'Founder, RRDevs',
-        speech: 'Busicon has been around for more than adecade. It’s a trusted social media tool for businesses of all shapes and sizes.',
+        speech: 'isysn has been around for more than adecade. It’s a trusted social media tool for businesses of all shapes and sizes.',
     },
 
     {
@@ -23,7 +23,7 @@ const TestimonialTwoData = [
         img: img1,
         name: 'Salman Ahned',
         designation: 'CEO, ModinaThemes',
-        speech: 'Busicon has been around for more than adecade. It’s a trusted social media tool for businesses of all shapes and sizes.',
+        speech: 'isysn has been around for more than adecade. It’s a trusted social media tool for businesses of all shapes and sizes.',
     },
     
 ]

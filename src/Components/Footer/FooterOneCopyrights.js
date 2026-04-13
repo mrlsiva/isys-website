@@ -10,7 +10,7 @@ const FooterOneCopyrights = () => {
                 <div className="row align-items-center">
                     <div className="col-md-6 col-12 text-center text-md-start">
                         <div className="copyright-info">
-                            <p>&copy; {currentYear} Copyright By <Link to="/">Busico</Link>. All Rights Reserved</p>                            
+                            <p>&copy; {currentYear} Copyright By <Link to="/">isys</Link>. All Rights Reserved</p>                            
                         </div>
                     </div>
                     <div className="col-md-6 col-12">
