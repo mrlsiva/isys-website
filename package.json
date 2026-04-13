@@ -1,6 +1,6 @@
 {
   "name": "isys",
-  "version": "1.0",
+  "version": "20.14.0",
   "private": true,
   "dependencies": {
     "@coreui/coreui": "^5.1.1",
