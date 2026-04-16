@@ -18,9 +18,10 @@ import HomeFour from './pages/HomeFour';
 import ProjectPage from './pages/ProjectPage';
 import ContactPage from './pages/ContactPage';
 import CareerPage from './pages/CareerPage';
-import SignUp from './Components/SignUp/SignUp';
+import SignUp from './pages/Signup';
 import Login from './Components/Login/Login';
-
+import { AuthProvider } from './context/AuthContext';
+import ProtectedRoute from './ProtectedRoutes';
 function App() {
   const [loading, setLoading] = useState(true);
 
@@ -35,6 +36,7 @@ function App() {
   } else {
     return (
     <>
+    <AuthProvider>
       <ScrollTopBtn/>
       <Routes>
         <Route path="/" element={<HomeThree />} />
@@ -47,7 +49,14 @@ function App() {
         <Route path="/services" element={<ServicePage />} />
         <Route path="/team" element={<TeamPage />} />
         <Route path="/faq" element={<FaqPage />} />
-        <Route path="/career" element={<CareerPage/>}/>
+        <Route
+          path="/career"
+          element={
+            <ProtectedRoute>
+              <CareerPage />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/pricing" element={<PricingPage />} />
         <Route path="/newsDetails" element={<NewsDetails />} />
@@ -55,6 +64,7 @@ function App() {
         <Route path="/news" element={<News />} />
         <Route path="/projects" element={<ProjectPage />} />
       </Routes>
+    </AuthProvider>
     </>
     )
   }

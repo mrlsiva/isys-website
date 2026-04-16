@@ -2,17 +2,16 @@ import React, { useState } from 'react';
 import Logo from '../../assets/img/home3/logo.png';
 import 'boxicons/css/boxicons.min.css';
 import { Link } from 'react-router-dom';
-import constants from '../../constants/Constants'
-import {toast} from 'react-toastify';
+import constants from '../../constants/Constants';
+import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext'; // import useAuth
+
 function Login() {
-  let user = {
-    code: '',
-    password: ''
-  };
+  const { login } = useAuth(); // get login function from context
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const [value, setValue] = useState(user);
+  const [value, setValue] = useState({ code: '', password: '' });
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -27,35 +26,58 @@ function Login() {
   };
 
   const submitUser = async (e) => {
-    e.preventDefault(); 
+    e.preventDefault();
     console.log("values", value);
-    const loginData={
-      userLogin:value.code,
-      password:value.password
+
+    const loginData = {
+      userLogin: value.code,
+      password: value.password
+    };
+
+    const Fullurl = constants.URL + 'authenticate';
+
+    try {
+      const res = await fetch(Fullurl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          "Access-Control-Allow-Headers": "Content-Type",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
+        },
+        body: JSON.stringify(loginData),
+      });
+
+      if (res.status === 200) {
+        const responseData = await res.json();
+        console.log("Response data:", responseData);
+
+        const { jwtToken, companyId, companyCode, employeeCode, employeeName } = responseData;
+
+        // Prepare user details
+        const userDetails = {
+          companyId: companyId || "",
+          companyCode: companyCode || "",
+          employeeCode: employeeCode || "",
+          employeeName: employeeName || ""
+        };
+
+        // Call context login function (this will update global state and storage)
+        login(jwtToken, userDetails);
+
+        toast.success("Login Successfully");
+        setTimeout(() => {
+          navigate('/');
+        }, 2000);
+      } else {
+        const errorText = await res.text();
+        console.error("Login failed:", res.status, errorText);
+        toast.error("Invalid credentials. Please try again.");
+      }
+    } catch (error) {
+      console.error("Network or server error:", error);
+      toast.error("Unable to connect to server. Please try again later.");
     }
-    let Fullurl=constants.CANDIDATE+'authenticate'
-    let res = await fetch(Fullurl, {
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json',
-        "Access-Control-Allow-Headers" : "Content-Type",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
-      },
-      body: JSON.stringify(loginData),
-    }).catch(function(error){
-    });
-    if (res.status === 200) {
-     
-      setTimeout(function () {
-        toast.success("login Successfully")
-        // setMessage('')
-        navigate('/');
-      }, 2000)
-    } else {
-  
-    }
-    //  window.location.href = '/'
   };
 
   return (
@@ -101,7 +123,6 @@ function Login() {
                           </div>
                         </div>
                         <div className="col-md-5 ps-0">
-                          
                         </div>
                         <div className="col-md-6 text-end pe-0">
                           <label className="form-check-label">Forgot Password?</label>
@@ -111,11 +132,9 @@ function Login() {
                             <input type="submit" className="btn btn-primary bg-primary p-3" value="Login" />
                           </div>
                         </div>
-                       
                         <div className="text-center mt-3">
-                        <p>Don't have an account? <Link to="/signup"><u className='text-primary'>Sign Up</u></Link></p>
-                      </div>
-                  
+                          <p>Don't have an account? <Link to="/signup"><u className='text-primary'>Sign Up</u></Link></p>
+                        </div>
                       </form>
                     </div>
                   </div>

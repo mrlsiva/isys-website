@@ -11334,3 +11334,8 @@ display: none;}
 .CircularProgressbar {
     width: 100px !important;
 }
+.lableFileArea {
+  font-size: 12px !important;
+  font-family: poppins;
+    font-weight: 500 !important;
+}

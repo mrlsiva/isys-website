@@ -7,6 +7,7 @@ class Constants {
    static URL = 'http://localhost:8080/adminservices/adminorch/v1/';
    static ADMSURL='http://localhost:8081/admsservices/admsorch/v1/';
    static SALEURL='http://localhost:8090/saleservices/saleorch/v1/';
+   static Product_URL = 'http://localhost:8082/services/data/v1/';
    static resource_search = 'resource_search';
    static requirement_table_api = 'create_requirement';
    static contract_search ='create_contract';
